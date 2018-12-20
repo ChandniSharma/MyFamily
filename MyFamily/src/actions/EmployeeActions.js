@@ -3,7 +3,6 @@ import firebase, { auth } from 'firebase';
 import {Actions} from  'react-native-router-flux';
 
 export const EmployeeUpdate = ({prop, value}) => {
-    console.log( 'prop ', prop, 'value ', value)
     return{
             type: EMPLOYEE_UPDATE ,
             payload: {prop,value}

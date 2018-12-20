@@ -19,8 +19,8 @@ class EmployeeCreate extends Component{
         return(
             <Card> 
                 <EmployeeForm  />
-                    <CardSection>
-                    <Button onPress={this.onButtonPressed.bind(this)}>
+                    <CardSection >
+                    <Button  onPress={this.onButtonPressed.bind(this)}>
                         Save
                     </Button>
                     </CardSection>
