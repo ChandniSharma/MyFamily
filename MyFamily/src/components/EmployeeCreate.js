@@ -5,6 +5,7 @@ import { EmployeeUpdate,EmployeeRecordCreate } from '../actions';
 
 import { Card, CardSection, Input, Button, Spinner} from './common';
 import EmployeeForm from './EmployeeForm';
+import {LinearGradient} from 'expo'; 
 
 class EmployeeCreate extends Component{
     
@@ -18,12 +19,14 @@ class EmployeeCreate extends Component{
         
         return(
             <Card> 
+                <LinearGradient
+                colors={['#87CEEB', '#87BDEB', '#192f6a']}
+                >
                 <EmployeeForm  />
-                    <CardSection >
-                    <Button  onPress={this.onButtonPressed.bind(this)}>
+                <Button  onPress={this.onButtonPressed.bind(this)}>
                         Save
                     </Button>
-                    </CardSection>
+                </LinearGradient>
             </Card>
         );
     } 

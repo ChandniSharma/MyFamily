@@ -6,15 +6,18 @@ import { connect } from 'react-redux';
 import { EmployeeUpdate } from '../actions';
 import DatePicker from "react-native-datepicker";
 
-import { ImagePicker, Notifications } from 'expo';
+import { ImagePicker, Notifications, LinearGradient } from 'expo';
 
 let d1 = new Date();
 d1.setHours((new Date().getHours())+2);
-
+let reminderRepeatVal = 'year';
+// let t = new Date();
+//   t.setSeconds(t.getSeconds() + 10);
+  
 class EmployeeForm extends Component{
     state ={
        isReminderAdd: false,
-       image: null,
+       image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
        repeatValue: 'year', // Default repeat value is year 
        bgColorBtnYear: 'pink',
        bgColorBtnMonth: '#ffffff',
@@ -24,7 +27,6 @@ class EmployeeForm extends Component{
         isWeek: false,
     }
 
-    backgroundColorUpdate = () => this.refs.tab1.backgroundColor('red').then(endState => console.log(endState.finished ? 'shaking' : 'shake cancelled'));
 
 
     onReminderBtnClick(){
@@ -33,10 +35,13 @@ class EmployeeForm extends Component{
            // Notifications.cancelAllScheduledNotificationsAsync();
         } else {
             this.setState({isReminderAdd:true})
+            // reminderRepeatVal = this.state.repeatValue;
             Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
         }
     }
     onYearBtnClick(){
+        
+        
         this.props.EmployeeUpdate({prop:'repeatValue', value:'year'})
         if (this.state.isYear) {
             this.setState({
@@ -46,34 +51,41 @@ class EmployeeForm extends Component{
         } else {
            this.setState({
                 bgColorBtnYear: 'pink',
+                bgColorBtnMonth: 'white',
+                bgColorBtnWeek: 'white',
                 isYear: true,
                 isMonth: false,
                 isWeek: false
             });
         }
-        
+       
     }
     onMonthBtnClick(){
         this.props.EmployeeUpdate({prop:'repeatValue', value:'month'})
-        if (this.state.isYear) {
+        if (this.state.isMonth) {
+            console.log('in month true ')
             this.setState({
-                 bgColorBtnMonth: 'white',
-                 isMonth: false
-             });
+                bgColorBtnMonth: 'white',
+                
+                    isMonth: false,
+                    
+                });
+            
         } else {
-           this.setState({
-            bgColorBtnMonth: 'pink',
-            bgColorBtnYear: 'white',
-            bgColorBtnWeek: 'white',
-                isMonth: true,
-                isYear: false,
-                isWeek: false
+            console.log('in month else')
+            this.setState({
+                bgColorBtnMonth: 'pink',
+                bgColorBtnYear: 'white',
+                bgColorBtnWeek: 'white',
+                    isMonth: false,
+                    isYear: false,
+                    isMonth: true
             });
         }
     }
     onWeekBtnClick(){
         this.props.EmployeeUpdate({prop:'repeatValue', value:'week'})
-        if (this.state.isYear) {
+        if (this.state.isWeek) {
             this.setState({
                  bgColorBtnWeek: 'white',
                  isWeek: false
@@ -92,14 +104,18 @@ class EmployeeForm extends Component{
 
     render(){
         console.log("Emp form ", this.props);
-        let { image } = this.state;
-         
+         let  image  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+       
+         if(this.props.image){
+            image = this.props.image;
+        }
+
         let reminderBtnTitle = '';
         if (!this.state.isReminderAdd) {
-            reminderBtnTitle = 'Click Me To Add Reminder'
+            reminderBtnTitle = 'Add Reminder'
             this.props.EmployeeUpdate({prop:'isReminder', value:'NO'})
         } else {
-            reminderBtnTitle = 'Reminder has Added';
+            reminderBtnTitle = 'Reminder Added';
             this.props.EmployeeUpdate({prop:'isReminder', value:'YES'})
 
         }
@@ -109,18 +125,13 @@ class EmployeeForm extends Component{
             
             <TouchableOpacity style={styles.imageBtnStyle } onPress= {this._pickImage}>
                                 <Text style={{alignSelf:'center'}}>
-                                   Click Me!
+                                   {/* Click Me! */}
                                 </Text>
 
-                {image? 
-                  <Image source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} style={styles.imageStyle} />
-                  : 
-                  <Image source={{ uri: image }} style={styles.imageStyle} />}
-
-                                {/* {image &&
-                            <Image source={{ uri: image }} style={{ width: 100, height: 100, position: "absolute" , borderRadius:50}} />} */}
-                            
-                            </TouchableOpacity>
+                
+                  <Image source={{ uri: image }} style={styles.imageStyle} />
+             
+                </TouchableOpacity>
     
                 
                 <CardSection>
@@ -178,7 +189,7 @@ class EmployeeForm extends Component{
                             Add Reminder
                         </Text>
                     <View style={styles.addReminderBtnView}> 
-                                        <Button style={{}} onPress={this.onReminderBtnClick.bind(this)}>
+                                        <Button style={{}} onPress={() => this.onReminderBtnClick()}>
                                                             {reminderBtnTitle}
                                         </Button>
                                         </View>
@@ -210,7 +221,7 @@ class EmployeeForm extends Component{
                                 </TouchableOpacity>
                                         </View>
                     </CardSection>
-
+                   
                    
             </View>
               </ScrollView>
@@ -224,7 +235,8 @@ class EmployeeForm extends Component{
         console.log(result);
     
         if (!result.cancelled) {
-          this.setState({ image: result.uri });
+            this.props.EmployeeUpdate({prop:'image', value:result.uri})
+        
         }
       };
 }
@@ -249,10 +261,11 @@ android: // (optional) (object) — notification configuration specific to Andro
 
   let t = new Date();
   t.setSeconds(t.getSeconds() + 10);
+  console.log( 'repeat value ', reminderRepeatVal)
   const schedulingOptions = {
       
-    time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-    repeat: 'minute'
+    time: t, 
+    repeat: 'year' // Reminder repeat duration 
   };
 
 const mapStateToProps = (state) => {

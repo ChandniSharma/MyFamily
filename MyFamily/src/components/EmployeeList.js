@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
-import {View, Text, ListView} from 'react-native';
+import {View, Text, ListView, Image} from 'react-native';
 import { connect } from 'react-redux';
 import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
+import { Button } from './common';
+import { Actions } from 'react-native-router-flux';
 
 
 
@@ -32,8 +34,20 @@ class EmployeeList extends Component{
                 if (employee.length > 0) {
                     return employee.map(album =>
                     <ListItem key={album.uid} employee={album} /> )
+
         }else{
-            return( <View /> );
+            return( 
+            <View style={styles.emptyView}>
+                <Image style={styles.sadSmiley} source={require('../../assets/sad.png')} />
+
+                
+                <Text style={styles.emptyText}>
+                    You don't have any member to display 
+                </Text>
+                <Button style={styles.btnAddMember} onPress={()=>{Actions.EmployeeCreate()}}>
+                    Add Member
+                </Button>
+            </View> );
         }
     }else{
         return( <View /> );
@@ -70,7 +84,33 @@ const styles={
     },
     listStyle:{
       paddingTop :100,
-
+      
+     
+    },
+    emptyView:{
+        
+        
+        
+        // backgroundColor: 'red',
+       
+    },
+    emptyText:{
+        padding:10,
+      fontSize: 20,
+      color:'gray',
+      alignSelf: 'center',
+    },
+    sadSmiley:{
+        padding:10,
+        width:32,
+        height:32,
+        alignSelf: 'center',
+    },
+    btnAddMember:{
+       padding:10,
+    //    widht: 200,
+    //    height: 200,
+       marginTop: 20,
     }
 }
 
