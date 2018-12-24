@@ -10,9 +10,9 @@ import {LinearGradient} from 'expo';
 class EmployeeCreate extends Component{
     
     onButtonPressed(){
-        const {nameUser, phone, dob, image, repeatValue, isReminder} = this.props;       
+        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg} = this.props;       
      
-        this.props.EmployeeRecordCreate({nameUser, phone, dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || 'NO'});
+        this.props.EmployeeRecordCreate({nameUser, phone, dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || 'NO', bdayMsg:bdayMsg || ''});
     }
 
     render(){
@@ -20,7 +20,7 @@ class EmployeeCreate extends Component{
         return(
             <Card> 
                 <LinearGradient
-                colors={['#87CEEB', '#87BDEB', '#192f6a']}
+                colors={['#ffffff', '#ffffff', '#ffffff']}
                 >
                 <EmployeeForm  />
                 <Button  onPress={this.onButtonPressed.bind(this)}>
@@ -40,9 +40,9 @@ const styles = {
 }
 
 const mapStateToProps = (state) =>{
-    const {nameUser, phone,  dob, image, repeatValue, isReminder} = state.employeeForm;
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg} = state.employeeForm;
     return{
-        nameUser, phone,  dob, image, repeatValue, isReminder
+        nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg
     };
 
   };

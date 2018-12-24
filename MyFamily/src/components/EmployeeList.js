@@ -6,8 +6,8 @@ import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
 import { Button } from './common';
 import { Actions } from 'react-native-router-flux';
-
-
+import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
+import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
 
 class EmployeeList extends Component{
 
@@ -37,7 +37,7 @@ class EmployeeList extends Component{
 
         }else{
             return( 
-            <View style={styles.emptyView}>
+            <View>
                 <Image style={styles.sadSmiley} source={require('../../assets/sad.png')} />
 
                 
@@ -53,17 +53,32 @@ class EmployeeList extends Component{
         return( <View /> );
     }
 }
+    bannerError() {
+        console.log('An error');
+        return;
+    }
+    adMobEvent(){
+        console.log( 'in admob event method ');
+    }
 
     render(){
         
         return(
-            <ListView style={styles.listStyle}
-            enableEmptySections
-            dataSource={this.dataSource}
-            renderRow={this.renderRow}
+            <View style={styles.mainView}>
+                 <ListView style={styles.listStyle}
+                    enableEmptySections
+                    dataSource={this.dataSource}
+                    renderRow={this.renderRow}
             />
-
-
+                <PublisherBanner
+            style={styles.bottomBanner}
+                bannerSize="fullBanner"
+                adUnitID= {kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
+                testDeviceID="EMULATOR"
+                onDidFailToReceiveAdWithError={this.bannerError}
+                onAdMobDispatchAppEvent={this.adMobEvent} />
+            </View>
+           
         );
         
 
@@ -78,21 +93,16 @@ const mapStateToProps = state => {
 };
 
 const styles={
+    mainView:{
+       flex: 1,
+    },
     titleStyle:{
         fontSize: 18,
         paddingLeft: 15,
     },
     listStyle:{
-      paddingTop :100,
+      paddingTop :'20%',
       
-     
-    },
-    emptyView:{
-        
-        
-        
-        // backgroundColor: 'red',
-       
     },
     emptyText:{
         padding:10,
@@ -111,7 +121,12 @@ const styles={
     //    widht: 200,
     //    height: 200,
        marginTop: 20,
-    }
+    },
+    bottomBanner: {
+        position: "absolute",
+        bottom: 0
+      },
+
 }
 
 export default connect(mapStateToProps, {employeesFetch})(EmployeeList);

@@ -7,6 +7,8 @@ import { EmployeeUpdate } from '../actions';
 import DatePicker from "react-native-datepicker";
 
 import { ImagePicker, Notifications, LinearGradient } from 'expo';
+import MessageInput from './MessageInput';
+
 
 let d1 = new Date();
 d1.setHours((new Date().getHours())+2);
@@ -25,6 +27,7 @@ class EmployeeForm extends Component{
         isYear: true,
         isMonth: false,
         isWeek: false,
+        
     }
 
 
@@ -189,10 +192,21 @@ class EmployeeForm extends Component{
                             Add Reminder
                         </Text>
                     <View style={styles.addReminderBtnView}> 
-                                        <Button style={{}} onPress={() => this.onReminderBtnClick()}>
-                                                            {reminderBtnTitle}
-                                        </Button>
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onReminderBtnClick()}>
+                                      {this.state.isReminderAdd? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
+                                       
+                        </TouchableOpacity>
+                                        
                                         </View>
+                    </CardSection>
+                    <CardSection>
+                        <MessageInput 
+                        label="Message"
+                        placeholder="Write your wishes and blessings !!! "
+                        onChangeText={text => this.props.EmployeeUpdate({prop:'bdayMsg', value:text})}
+                        value={this.props.bdayMsg}
+                        />
                     </CardSection>
                     <CardSection>
                         <Text style= {styles.textStyle}>
@@ -269,10 +283,10 @@ android: // (optional) (object) — notification configuration specific to Andro
   };
 
 const mapStateToProps = (state) => {
-    const {nameUser, phone,  dob, image, repeatValue, isReminder } = state.employeeForm;
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg } = state.employeeForm;
 
     console.log( 'dob is ---',dob  );
-    return {nameUser, phone,  dob, image, repeatValue, isReminder};
+    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg};
 }
 
 const styles = {
@@ -281,7 +295,8 @@ const styles = {
         paddingLeft: 20,
     },
     textStyle:{
-        fontSize:17, color: 'black', justifyContent:'center', marginLeft:10
+        fontSize:17, color: 'black', justifyContent:'center', marginLeft:10,
+        marginTop: 10
     },
     datePickerStyle:{
         width: "40%",
@@ -291,13 +306,18 @@ const styles = {
         width: 100, height: 100, position: "absolute" , borderRadius:50
     }, 
     imageBtnStyle:{
-        padding:10 ,width: 100, height: 100 , alignItems: 'center', justifyContent: 'center', position:'relative', alignSelf: 'center', borderRadius:50, backgroundColor:'white'
+        padding:10 ,
+        width: 100, 
+        height: 100 , 
+        alignItems: 'center',
+        justifyContent: 'center', 
+        position:'relative', alignSelf: 'center', borderRadius:50, backgroundColor:'white'
     },
     addReminderBtnView:{
         marginTop: 10,  
-        // padding:10, 
         marginBottom:10,
-        marginRight:10,
+        marginLeft:10,
+       
     },
     repeatReminderView:{
         flexDirection: 'row',
@@ -313,6 +333,12 @@ const styles = {
         height: 35,
         backgroundColor:'pink'
         },
+    imgCheckMark:{
+        width:32,
+        height: 32,
+         
+    },
+        
 
 }
 

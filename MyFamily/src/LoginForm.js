@@ -8,6 +8,9 @@ import EmployeeList from './components/EmployeeList';
 import { AsyncStorage } from "react-native";
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
+import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './components/Constants';
+
+
 
 class LoginForm extends Component{
 
@@ -78,10 +81,11 @@ class LoginForm extends Component{
     render(){
         return(
             <LinearGradient
-                   colors={['#ffdde1','#ffdde1', '#ffdde1']}
+                //    colors={['#ffdde1','#ffdde1', '#ffdde1']}
+                   colors={['#ffffff','#ffffff', '#ffffff']}
                    style= {styles.gradientStyle}
                 >
-            <Card>
+            <View>
                 
                 <CardSection>
                 <Input 
@@ -109,11 +113,11 @@ class LoginForm extends Component{
 
             {this.renderButton()}
                 
-            </Card>
+            </View>
             <PublisherBanner
             style={styles.bottomBanner}
                 bannerSize="fullBanner"
-                adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                adUnitID={kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
                 testDeviceID="EMULATOR"
                 onDidFailToReceiveAdWithError={this.bannerError}
                 onAdMobDispatchAppEvent={this.adMobEvent} />

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { TextField } from 'react-native-material-textfield';
 
-const Input = ({label,value, onChangeText, placeholder, secureTextEntry,keyboardType, charLimit, error,prefix, onFocus}) =>{
+const MessageInput = ({label,value, onChangeText, placeholder, secureTextEntry,keyboardType, charLimit, error,prefix, onFocus}) =>{
 
     const {viewContainerStyle, labelStyle, textInputStyle,affixTextStyle } = styles;
     return(
@@ -13,8 +13,9 @@ const Input = ({label,value, onChangeText, placeholder, secureTextEntry,keyboard
                 keyboardType={keyboardType}
                 textColor='#000000'
                 baseColor = '#656565'
-                fontSize={18}
+                fontSize={16}
                 onFocus={onFocus}
+                multiline={true}
                 // characterRestriction={charLimit}
                 containerStyle={viewContainerStyle}
                 inputContainerStyle={textInputStyle}
@@ -25,20 +26,10 @@ const Input = ({label,value, onChangeText, placeholder, secureTextEntry,keyboard
                 lineWidth={0}
                  labelHeight={15}
             /> 
-        // <View style={viewContainerStyle}> 
-        //     <Text style={labelStyle}>{label}</Text>
-        //     <TextInput 
-        //     secureTextEntry={secureTextEntry}
-        //     autoCorrect={false}
-        //     placeholder={placeholder}
-        //     style={textInputStyle}
-        //     value={value}
-        //     onChangeText={onChangeText}
-        //     />
-        // </View>
+        
     );
 };
-export  {Input};
+export default MessageInput;
 
 const styles = {
 
@@ -48,16 +39,16 @@ const styles = {
      borderColor: 'gray',
      borderWidth: 1,
      borderRadius: 23,
-     height: 50,
+     
      alignItems: 'center',
      justifyContent:'center',
      marginLeft: 10,
      marginRight: 10,
-    //  backgroundColor:'green'
+    //   backgroundColor:'green'
     },
     labelStyle:{
        fontSize: 28,
-        backgroundColor:'white',
+       backgroundColor:'white',
        top:-5,
        color:'blue'
     },
@@ -67,7 +58,7 @@ const styles = {
         marginLeft: 20,
         marginRight:15,
         justifyContent: 'center',
-        // backgroundColor:'pink'
+        //  backgroundColor:'pink'
         // fontSize: 18, 
         // lineHeight: 23
     }

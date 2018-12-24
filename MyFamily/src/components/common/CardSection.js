@@ -17,7 +17,7 @@ export { CardSection } ;
 
 const styles = {
     viewContainer:{
-        borderBottomWidth: 1,
+        borderBottomWidth: 0,
         backgroundColor: 'fff',
         padding: 5,
         justifyContent: 'flex-start',

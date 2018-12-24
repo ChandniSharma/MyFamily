@@ -9,8 +9,8 @@ export const EmployeeUpdate = ({prop, value}) => {
         };
 }
 
-export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder}) => {
-  console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder);
+export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg}) => {
+  console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg);
   const { currentUser } = firebase.auth();
 
   return (dispatch) => {
@@ -40,13 +40,13 @@ export const employeesFetch = () => {
     };
 };
 
-export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid }) => {
+export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg}) => {
 
     const { currentUser } = firebase.auth();
 
     return(dispatch) =>{
         firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
-          .set({ nameUser , phone, dob, image, repeatValue, isReminder })
+          .set({ nameUser , phone, dob, image, repeatValue, isReminder, bdayMsg })
           .then(() => {
             dispatch({type:EMPLOYEE_SAVE_SUCCESS});
             Actions.EmployeeList({type: 'reset'});

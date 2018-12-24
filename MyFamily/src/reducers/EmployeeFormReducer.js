@@ -6,7 +6,8 @@ const INITIAL_STATE = {
     dob: '', 
     image:'', 
     repeatValue:'', 
-    isReminder:'NO'
+    isReminder:'NO',
+    bdayMsg: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
