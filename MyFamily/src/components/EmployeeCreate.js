@@ -6,20 +6,42 @@ import { EmployeeUpdate,EmployeeRecordCreate } from '../actions';
 import { Card, CardSection, Input, Button, Spinner} from './common';
 import EmployeeForm from './EmployeeForm';
 import {LinearGradient} from 'expo'; 
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
+import * as constants from './Constants';
+
 
 class EmployeeCreate extends Component{
     
     onButtonPressed(){
-        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg} = this.props;       
-     
-        this.props.EmployeeRecordCreate({nameUser, phone, dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || 'NO', bdayMsg:bdayMsg || ''});
+
+        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = this.props;     
+        if(nameUser.trim() === '' || phone.trim() === '') {
+            return;
+         }else{
+                if (phone.length === 0 || phone.length!=10) {
+                    Alert.alert(
+                        '',
+                        constants.msgMobileNumber,
+                        [
+                          {text: constants.titleOk, onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        ],
+                        { cancelable: false }
+                      )
+                      return;
+                    }
+            }
+        
+        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || 'NO', bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || []});
     }
 
     render(){
         
         return(
-            <Card> 
-                <LinearGradient
+            <KeyboardAwareScrollView  keyboardShouldPersistTaps={'always'}
+            style={{flex:1}}
+            showsVerticalScrollIndicator={true}>
+             <View> 
+                 <LinearGradient
                 colors={['#ffffff', '#ffffff', '#ffffff']}
                 >
                 <EmployeeForm  />
@@ -27,7 +49,8 @@ class EmployeeCreate extends Component{
                         Save
                     </Button>
                 </LinearGradient>
-            </Card>
+            </View>
+            </KeyboardAwareScrollView>
         );
     } 
 }
@@ -40,9 +63,9 @@ const styles = {
 }
 
 const mapStateToProps = (state) =>{
-    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg} = state.employeeForm;
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = state.employeeForm;
     return{
-        nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg
+        nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents
     };
 
   };

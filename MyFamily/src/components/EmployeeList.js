@@ -69,6 +69,7 @@ class EmployeeList extends Component{
                     enableEmptySections
                     dataSource={this.dataSource}
                     renderRow={this.renderRow}
+                    marginBottom={50} 
             />
                 <PublisherBanner
             style={styles.bottomBanner}
@@ -102,7 +103,7 @@ const styles={
     },
     listStyle:{
       paddingTop :'20%',
-      
+      height: '82%',
     },
     emptyText:{
         padding:10,

@@ -7,6 +7,7 @@ import LoginForm from '../LoginForm';
 import EmployeeList from '../components/EmployeeList';
 import EmployeeCreate from '../components/EmployeeCreate';
 import EmployeeEdit from './EmployeeEdit';
+import AddEvents from './AddEvents';
 import firebase from 'firebase';
 
  class  RouterComponent extends Component{
@@ -46,6 +47,12 @@ import firebase from 'firebase';
                     rightTitle="Signout"
                     onRight={()=> this.signOutUser()}
                     />
+
+                <Scene key = "AddEvents" 
+                    component={AddEvents} 
+                    title = "Add More Events" 
+                    />
+                    
                 </Scene>
                 </Scene>
             </Router>
@@ -57,18 +64,4 @@ import firebase from 'firebase';
 
 export default RouterComponent;
 
-// import {
-//     createStackNavigator,
-//   } from 'react-navigation';
-  
-
-//   const Navigator = createStackNavigator({
-//     LoginForm: { screen: LoginForm },
-//     EmployeeList: { screen: EmployeeList },
-//     EmployeeCreate:{ screen: EmployeeCreate},
-//     EmployeeEdit:{ screen: EmployeeEdit}
-//   });
- 
-
-// export default navigator;
 

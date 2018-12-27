@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
 
 import { CardSection, Input, Button } from './common';
 import { connect } from 'react-redux';
@@ -8,54 +8,87 @@ import DatePicker from "react-native-datepicker";
 
 import { ImagePicker, Notifications, LinearGradient } from 'expo';
 import MessageInput from './MessageInput';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
+import { Actions } from 'react-native-router-flux';
+import AddEvents from './AddEvents';
+import * as constants from './Constants';
+
 
 
 let d1 = new Date();
 d1.setHours((new Date().getHours())+2);
-let reminderRepeatVal = 'year';
+let reminderRepeatVal = constants.kYear;
 // let t = new Date();
 //   t.setSeconds(t.getSeconds() + 10);
   
 class EmployeeForm extends Component{
     state ={
-       isReminderAdd: false,
+       
+      
        image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-       repeatValue: 'year', // Default repeat value is year 
-       bgColorBtnYear: 'pink',
-       bgColorBtnMonth: '#ffffff',
-       bgColorBtnWeek: '#ffffff',
+       repeatValue: constants.kYear, // Default repeat value is year 
+       bgColorBtnYear: constants.kSelectedColor,
+       bgColorBtnMonth: constants.kNotSelectedColor,
+       bgColorBtnWeek: constants.kNotSelectedColor,
         isYear: true,
         isMonth: false,
         isWeek: false,
+        charCount:200,
         
     }
 
+componentDidMount(){
+    console.log(' data Event array', this.props.arrayEvent);
+    if (this.props.repeatValue === constants.kYear) {
+        this.setState({bgColorBtnYear:constants.kSelectedColor});
+        this.setState({bgColorBtnMonth:constants.kNotSelectedColor});
+        this.setState({bgColorBtnWeek:constants.kNotSelectedColor});
+    } else if(this.props.repeatValue === constants.kMonth){
+        this.setState({bgColorBtnYear:constants.kNotSelectedColor});
+        this.setState({bgColorBtnMonth:constants.kSelectedColor});
+        this.setState({bgColorBtnWeek:constants.kNotSelectedColor});
+    }else{
+        this.setState({bgColorBtnYear:constants.kNotSelectedColor});
+        this.setState({bgColorBtnMonth:constants.kNotSelectedColor});
+        this.setState({bgColorBtnWeek:constants.kSelectedColor});
+    }
+    console.log('In emp form  bday msg length ', this.props.bdayMsg.length);
 
+    if(this.props.bdayMsg.length>0){
+        this.setState({charCount:this.props.bdayMsg.length});
+    }
+}
 
     onReminderBtnClick(){
-        if (this.state.isReminderAdd) {
-            this.setState({isReminderAdd:false})
+        if (this.props.isReminder === constants.kNo) {
+           
+            this.props.EmployeeUpdate({prop:'isReminder', value:constants.kYes})
            // Notifications.cancelAllScheduledNotificationsAsync();
         } else {
-            this.setState({isReminderAdd:true})
+           
+            this.props.EmployeeUpdate({prop:'isReminder', value:constants.kNo})
+
             // reminderRepeatVal = this.state.repeatValue;
             Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
         }
     }
+
+    onAddEventBtnClick(){
+            Actions.AddEvents();        
+    }
     onYearBtnClick(){
         
-        
-        this.props.EmployeeUpdate({prop:'repeatValue', value:'year'})
+        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kYear})
         if (this.state.isYear) {
             this.setState({
-                 bgColorBtnYear: 'white',
+                 bgColorBtnYear: constants.kNotSelectedColor,
                  isYear: false
              });
         } else {
            this.setState({
-                bgColorBtnYear: 'pink',
-                bgColorBtnMonth: 'white',
-                bgColorBtnWeek: 'white',
+                bgColorBtnYear: constants.kSelectedColor,
+                bgColorBtnMonth: constants.kNotSelectedColor,
+                bgColorBtnWeek: constants.kNotSelectedColor,
                 isYear: true,
                 isMonth: false,
                 isWeek: false
@@ -64,11 +97,11 @@ class EmployeeForm extends Component{
        
     }
     onMonthBtnClick(){
-        this.props.EmployeeUpdate({prop:'repeatValue', value:'month'})
+        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kMonth})
         if (this.state.isMonth) {
             console.log('in month true ')
             this.setState({
-                bgColorBtnMonth: 'white',
+                bgColorBtnMonth: constants.kNotSelectedColor,
                 
                     isMonth: false,
                     
@@ -77,9 +110,9 @@ class EmployeeForm extends Component{
         } else {
             console.log('in month else')
             this.setState({
-                bgColorBtnMonth: 'pink',
-                bgColorBtnYear: 'white',
-                bgColorBtnWeek: 'white',
+                bgColorBtnMonth: constants.kSelectedColor,
+                bgColorBtnYear: constants.kNotSelectedColor,
+                bgColorBtnWeek: constants.kNotSelectedColor,
                     isMonth: false,
                     isYear: false,
                     isMonth: true
@@ -87,23 +120,31 @@ class EmployeeForm extends Component{
         }
     }
     onWeekBtnClick(){
-        this.props.EmployeeUpdate({prop:'repeatValue', value:'week'})
+        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kWeek})
         if (this.state.isWeek) {
             this.setState({
-                 bgColorBtnWeek: 'white',
+                 bgColorBtnWeek: constants.kNotSelectedColor,
                  isWeek: false
              });
         } else {
            this.setState({
-            bgColorBtnMonth: 'white',
-            bgColorBtnYear: 'white',
-            bgColorBtnWeek: 'pink',
+            bgColorBtnMonth: constants.kNotSelectedColor,
+            bgColorBtnYear: constants.kNotSelectedColor,
+            bgColorBtnWeek: constants.kSelectedColor,
                 isMonth: false,
                 isYear: false,
                 isWeek: true
             });
         }
     }
+onChangeTextMessage(text){
+    console.log( 'text length ', text.length);
+    
+     this.setState({charCount:text.length})
+    {
+        this.props.EmployeeUpdate({prop:'bdayMsg', value:text})
+    }
+}
 
     render(){
         console.log("Emp form ", this.props);
@@ -112,27 +153,26 @@ class EmployeeForm extends Component{
          if(this.props.image){
             image = this.props.image;
         }
+        let isAnotherEventAdd = false;
+        if (Array.isArray(this.props.arrayEvent)) {
+            if(this.props.arrayEvent.length>0){
+                isAnotherEventAdd = true
+            }
+        } 
+        let reminderAddOrNot = false;
+        if (this.props.isReminder === constants.kYes) {
+            reminderAddOrNot = true;
+        } 
 
-        let reminderBtnTitle = '';
-        if (!this.state.isReminderAdd) {
-            reminderBtnTitle = 'Add Reminder'
-            this.props.EmployeeUpdate({prop:'isReminder', value:'NO'})
-        } else {
-            reminderBtnTitle = 'Reminder Added';
-            this.props.EmployeeUpdate({prop:'isReminder', value:'YES'})
-
-        }
+        
         return(
-            <ScrollView>
-            <View>
             
+            <View>
             <TouchableOpacity style={styles.imageBtnStyle } onPress= {this._pickImage}>
                                 <Text style={{alignSelf:'center'}}>
                                    {/* Click Me! */}
                                 </Text>
-
-                
-                  <Image source={{ uri: image }} style={styles.imageStyle} />
+             <Image source={{ uri: image }} style={styles.imageStyle} />
              
                 </TouchableOpacity>
     
@@ -141,18 +181,23 @@ class EmployeeForm extends Component{
                     <Input 
                     label="Name"
                     placeholder="Chandni"
+                    charLimit={25}
                     onChangeText={text => this.props.EmployeeUpdate({prop:'nameUser', value:text})}
                     value={this.props.nameUser}
                     />
                 </CardSection>
 
                 <CardSection>
-                 <Input 
-                    label="Phone"
-                    placeholder="555-555-5555" 
-                    onChangeText={text =>this.props.EmployeeUpdate({prop:'phone', value:text})}
+                <Input 
+                    label={'Phone'}
+                    prefix={'+91'}
+                    placeholder={'Mobile Number'}
                     value={this.props.phone}
-                    />
+                    charLimit={10}
+                    keyboardType='number-pad'
+                    onChangeText={text => this.props.EmployeeUpdate({prop:'phone', value:text})}
+                />
+                
                  </CardSection>
 
                  <CardSection>
@@ -160,7 +205,6 @@ class EmployeeForm extends Component{
                  <Text style={styles.textStyle}>
                      Date Of Birth
                  </Text>
-
                      <DatePicker
                             style={styles.datePickerStyle}
                             date={this.props.dob}
@@ -193,20 +237,28 @@ class EmployeeForm extends Component{
                         </Text>
                     <View style={styles.addReminderBtnView}> 
                                 <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onReminderBtnClick()}>
-                                      {this.state.isReminderAdd? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                      {reminderAddOrNot? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
                                     <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
                                        
                         </TouchableOpacity>
                                         
-                                        </View>
+                    </View>
                     </CardSection>
                     <CardSection>
-                        <MessageInput 
+                    <MessageInput
+                        onChangeText={text =>  this.onChangeTextMessage(text)}
+                        value={this.props.bdayMsg}
+                      />
+                       <Text style={styles.textLimit}>
+                            {this.state.charCount}/200
+                    </Text>
+                        {/* <MessageInput 
                         label="Message"
                         placeholder="Write your wishes and blessings !!! "
                         onChangeText={text => this.props.EmployeeUpdate({prop:'bdayMsg', value:text})}
                         value={this.props.bdayMsg}
-                        />
+                        charLimit={100}
+                        /> */}
                     </CardSection>
                     <CardSection>
                         <Text style= {styles.textStyle}>
@@ -235,10 +287,22 @@ class EmployeeForm extends Component{
                                 </TouchableOpacity>
                                         </View>
                     </CardSection>
-                   
+                    <CardSection>
+                    <Text style= {styles.textStyle}>
+                            Add another events
+                        </Text>
+                    <View style={styles.addReminderBtnView}> 
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onAddEventBtnClick()}>
+                                      {isAnotherEventAdd? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
+                                       
+                        </TouchableOpacity>
+                                        
+                                        </View>
+                    </CardSection>
                    
             </View>
-              </ScrollView>
+             
         )
     }
     _pickImage = async () => {
@@ -253,6 +317,29 @@ class EmployeeForm extends Component{
         
         }
       };
+
+      // Validations 
+      mobileValidate(phoneNumber) {
+        const reg = /^[0]?[789]\d{9}$/;
+        if (reg.test(phoneNumber) === false) {
+
+            this.props.EmployeeUpdate({prop:'phone', value:phoneNumber})
+            // this.setState({
+            //     mobileValidate: false,
+            //     phoneNumber: phoneNumber,
+            // });
+            return false;
+        } else {
+
+            this.props.EmployeeUpdate({prop:'phone', value:phoneNumber})
+            // this.setState({
+            //     mobileValidate: true,
+            //     phoneNumber: phoneNumber,
+            // });
+            return true;
+        }
+    }
+
 }
 
 const localNotification = {
@@ -279,14 +366,14 @@ android: // (optional) (object) — notification configuration specific to Andro
   const schedulingOptions = {
       
     time: t, 
-    repeat: 'year' // Reminder repeat duration 
+    repeat: constants.kYear // Reminder repeat duration 
   };
 
 const mapStateToProps = (state) => {
-    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg } = state.employeeForm;
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvent } = state.employeeForm;
 
-    console.log( 'dob is ---',dob  );
-    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg};
+    
+    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvent};
 }
 
 const styles = {
@@ -311,7 +398,7 @@ const styles = {
         height: 100 , 
         alignItems: 'center',
         justifyContent: 'center', 
-        position:'relative', alignSelf: 'center', borderRadius:50, backgroundColor:'white'
+        position:'relative', alignSelf: 'center', borderRadius:50, backgroundColor:constants.kNotSelectedColor
     },
     addReminderBtnView:{
         marginTop: 10,  
@@ -322,7 +409,7 @@ const styles = {
     repeatReminderView:{
         flexDirection: 'row',
         flex: 1,
-        marginBottom:40,
+        
     },
      yearBtn:{
         borderWidth: 1,
@@ -331,14 +418,21 @@ const styles = {
         marginRight: 10,
         width: 35,
         height: 35,
-        backgroundColor:'pink'
+        backgroundColor:constants.kSelectedColor,
         },
     imgCheckMark:{
         width:32,
         height: 32,
          
     },
-        
+    textLimit:{
+        fontSize:12,
+        position: 'absolute',
+        right: '13%',
+        bottom:'5%',
+        color: 'gray',
+    
+    }    
 
 }
 

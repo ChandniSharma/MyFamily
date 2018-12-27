@@ -1,11 +1,13 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import {View, Text, Picker } from 'react-native';
+import {View, Text, Picker, Alert } from 'react-native';
 import Communications from 'react-native-communications';
 import { CardSection, Card, Button, Confirm } from './common';
 import { connect } from 'react-redux';
 import { EmployeeUpdate, employeeSave, employeeDelete } from '../actions';
 import EmployeeForm from './EmployeeForm';
+import * as constants from './Constants';
+
 
 class EmployeeEdit extends Component{
     state = {
@@ -15,20 +17,34 @@ class EmployeeEdit extends Component{
         _.each(this.props.employee, (value, prop) => {
             this.props.EmployeeUpdate ({ prop, value});
         });
+        console.log('In edit mode length ', this.props.bdayMsg.length);
+    
+    if(this.props.bdayMsg.length>0){
+        this.setState({charCount:this.props.bdayMsg.length});
+      }
     }
     onButtonPress(){
-        const {nameUser, phone, dob, image, repeatValue, isReminder} = this.props;
+        const {nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg ,arrayEvents} = this.props;
         console.log(" In Edit btn press ", this.props);
-        this.props.employeeSave({nameUser, phone, dob, image, repeatValue, isReminder, uid: this.props.employee.uid});
+        this.props.employeeSave({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents, uid: this.props.employee.uid});
     }
     onTextPress(){
       const {phone, shift} = this.props;
       Communications.text(phone, `Your upcoming shift is on ${shift}`);
     }
     onFireEmployeePress(){
-       this.setState({showModal: true})
+        Alert.alert(
+            constants.titleDelete,
+            constants.msgDeleteMember,
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'Ok', onPress: () => {this.onPressDelete()}},
+            ],
+            { cancelable: false }
+          )
+    //    this.setState({showModal: true})
     }
-    onAccept(){
+    onPressDelete(){
       this.props.employeeDelete({ uid: this.props.employee.uid})
     }
     onDecline(){
@@ -48,14 +64,8 @@ class EmployeeEdit extends Component{
                 </CardSection>
 
                 <CardSection>
-                    <Button onPress={this.onTextPress.bind(this)}>
-                         Text Schedule
-                    </Button>
-                </CardSection>
-
-                <CardSection>
                     <Button onPress={this.onFireEmployeePress.bind(this)}>
-                         Fire Employee
+                         Delete Member
                     </Button>
                 </CardSection>
 
@@ -64,7 +74,7 @@ class EmployeeEdit extends Component{
                   onAccept= {this.onAccept.bind(this)}
                   onDecline={this.onDecline.bind(this)}
                 >
-                    Are you sure you want to fire this employee
+                    Are you sure you want to delete this member?
                 </Confirm>
 
             </Card>
@@ -72,8 +82,8 @@ class EmployeeEdit extends Component{
     }
 }
 const mapStateToProps = (state) => {
-  const {nameUser , phone ,  dob, image, repeatValue, isReminder} = state.employeeForm;
-  return {nameUser, phone,  dob, image, repeatValue, isReminder} ;
+  const {nameUser , phone ,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = state.employeeForm;
+  return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} ;
 }
 
 export default connect (mapStateToProps , 

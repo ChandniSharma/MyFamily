@@ -9,13 +9,13 @@ export const EmployeeUpdate = ({prop, value}) => {
         };
 }
 
-export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg}) => {
-  console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg);
+export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents}) => {
+   console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents);
   const { currentUser } = firebase.auth();
 
   return (dispatch) => {
     firebase.database().ref(`/users/${currentUser.uid}/employees`)
-    .push({nameUser,phone, dob, image, repeatValue, isReminder})
+    .push({nameUser,phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents})
     .then(() => {
         dispatch({type:EMPLOYEE_CREATE});
         Actions.EmployeeList({type: 'reset'})
@@ -40,13 +40,13 @@ export const employeesFetch = () => {
     };
 };
 
-export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg}) => {
+export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg, arrayEvents}) => {
 
     const { currentUser } = firebase.auth();
 
     return(dispatch) =>{
         firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
-          .set({ nameUser , phone, dob, image, repeatValue, isReminder, bdayMsg })
+          .set({ nameUser , phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents })
           .then(() => {
             dispatch({type:EMPLOYEE_SAVE_SUCCESS});
             Actions.EmployeeList({type: 'reset'});

@@ -8,10 +8,11 @@ const INITIAL_STATE = {
     repeatValue:'', 
     isReminder:'NO',
     bdayMsg: '',
+    arrayEvents: []
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log( 'action is ---', action);
+    // console.log( 'action is ---', action);
     switch(action.type){
         case EMPLOYEE_UPDATE:
          return {...state, [action.payload.prop]:action.payload.value};
