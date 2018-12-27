@@ -6,6 +6,7 @@ const Input = ({label,value, onChangeText, placeholder, secureTextEntry,keyboard
     const {viewContainerStyle, labelStyle, textInputStyle,affixTextStyle } = styles;
     return(
           <TextField
+          
                  label={label}
                 labelTextStyle={labelStyle}
                 value={value}

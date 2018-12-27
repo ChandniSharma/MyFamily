@@ -17,11 +17,7 @@ class EmployeeEdit extends Component{
         _.each(this.props.employee, (value, prop) => {
             this.props.EmployeeUpdate ({ prop, value});
         });
-        console.log('In edit mode length ', this.props.bdayMsg.length);
-    
-    if(this.props.bdayMsg.length>0){
-        this.setState({charCount:this.props.bdayMsg.length});
-      }
+        
     }
     onButtonPress(){
         const {nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg ,arrayEvents} = this.props;
@@ -54,7 +50,7 @@ class EmployeeEdit extends Component{
         console.log(" In Edit ", this.props.employee);
 
         return(
-            <Card>
+            <View>
                 <EmployeeForm {...this.props}/>
 
                 <CardSection>
@@ -69,15 +65,15 @@ class EmployeeEdit extends Component{
                     </Button>
                 </CardSection>
 
-                <Confirm 
+                {/* <Confirm 
                   visible={this.state.showModal}
                   onAccept= {this.onAccept.bind(this)}
                   onDecline={this.onDecline.bind(this)}
                 >
                     Are you sure you want to delete this member?
-                </Confirm>
+                </Confirm> */}
 
-            </Card>
+            </View>
         );
     }
 }

@@ -102,7 +102,7 @@ const styles={
         paddingLeft: 15,
     },
     listStyle:{
-      paddingTop :'20%',
+      paddingTop :'5%',
       height: '82%',
     },
     emptyText:{

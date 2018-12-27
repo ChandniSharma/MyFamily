@@ -40,6 +40,8 @@ import firebase from 'firebase';
                     <Scene key="EmployeeCreate" 
                     component={EmployeeCreate} 
                     title="Add Member" 
+                    rightTitle="Signout"
+                    onRight={()=> this.signOutUser()}
                     />
                     <Scene key = "EmployeeEdit" 
                     component={EmployeeEdit} 

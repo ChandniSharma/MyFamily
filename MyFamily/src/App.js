@@ -14,19 +14,19 @@ export default class App extends Component{
     componentWillMount(){
         // Initialize Firebase
             const config = {
-                // apiKey: "AIzaSyCDgN9aTO8CUuAy_PRnAi1lbyf6FuO1sdM",
-                // authDomain: "myfamily-740cf.firebaseapp.com",
-                // databaseURL: "https://myfamily-740cf.firebaseio.com",
-                // projectId: "myfamily-740cf",
-                // storageBucket: "myfamily-740cf.appspot.com",
-                // messagingSenderId: "100752052821"
+                apiKey: "AIzaSyCDgN9aTO8CUuAy_PRnAi1lbyf6FuO1sdM",
+                authDomain: "myfamily-740cf.firebaseapp.com",
+                databaseURL: "https://myfamily-740cf.firebaseio.com",
+                projectId: "myfamily-740cf",
+                storageBucket: "myfamily-740cf.appspot.com",
+                messagingSenderId: "100752052821"
 // Example app database 
-                apiKey: "AIzaSyAbkO-qTXWvGWnfzqoFpqppFLUUdAieWlE",
-                authDomain: "managerredux-ea9d1.firebaseapp.com",
-                databaseURL: "https://managerredux-ea9d1.firebaseio.com",
-                projectId: "managerredux-ea9d1",
-                storageBucket: "managerredux-ea9d1.appspot.com",
-                messagingSenderId: "23471623840"
+                // apiKey: "AIzaSyAbkO-qTXWvGWnfzqoFpqppFLUUdAieWlE",
+                // authDomain: "managerredux-ea9d1.firebaseapp.com",
+                // databaseURL: "https://managerredux-ea9d1.firebaseio.com",
+                // projectId: "managerredux-ea9d1",
+                // storageBucket: "managerredux-ea9d1.appspot.com",
+                // messagingSenderId: "23471623840"
   };
   firebase.initializeApp(config);
   }

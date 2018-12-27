@@ -23,8 +23,6 @@ let reminderRepeatVal = constants.kYear;
   
 class EmployeeForm extends Component{
     state ={
-       
-      
        image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
        repeatValue: constants.kYear, // Default repeat value is year 
        bgColorBtnYear: constants.kSelectedColor,
@@ -34,6 +32,7 @@ class EmployeeForm extends Component{
         isMonth: false,
         isWeek: false,
         charCount:200,
+       
         
     }
 
@@ -141,9 +140,12 @@ onChangeTextMessage(text){
     console.log( 'text length ', text.length);
     
      this.setState({charCount:text.length})
-    {
+    
         this.props.EmployeeUpdate({prop:'bdayMsg', value:text})
-    }
+    
+}
+onChangePhoneText(text){
+    this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})
 }
 
     render(){
@@ -194,8 +196,8 @@ onChangeTextMessage(text){
                     placeholder={'Mobile Number'}
                     value={this.props.phone}
                     charLimit={10}
-                    keyboardType='number-pad'
-                    onChangeText={text => this.props.EmployeeUpdate({prop:'phone', value:text})}
+                    keyboardType='numeric'
+                    onChangeText={text =>  this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})}
                 />
                 
                  </CardSection>
@@ -250,7 +252,7 @@ onChangeTextMessage(text){
                         value={this.props.bdayMsg}
                       />
                        <Text style={styles.textLimit}>
-                            {this.state.charCount}/200
+                            {this.props.bdayMsg.length}/200
                     </Text>
                         {/* <MessageInput 
                         label="Message"
@@ -314,32 +316,8 @@ onChangeTextMessage(text){
     
         if (!result.cancelled) {
             this.props.EmployeeUpdate({prop:'image', value:result.uri})
-        
         }
       };
-
-      // Validations 
-      mobileValidate(phoneNumber) {
-        const reg = /^[0]?[789]\d{9}$/;
-        if (reg.test(phoneNumber) === false) {
-
-            this.props.EmployeeUpdate({prop:'phone', value:phoneNumber})
-            // this.setState({
-            //     mobileValidate: false,
-            //     phoneNumber: phoneNumber,
-            // });
-            return false;
-        } else {
-
-            this.props.EmployeeUpdate({prop:'phone', value:phoneNumber})
-            // this.setState({
-            //     mobileValidate: true,
-            //     phoneNumber: phoneNumber,
-            // });
-            return true;
-        }
-    }
-
 }
 
 const localNotification = {

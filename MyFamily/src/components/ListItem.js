@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import {Text, TouchableWithoutFeedback, View, TouchableOpacity, Share} from 'react-native';
+import {Text, TouchableWithoutFeedback, View, TouchableOpacity, Share, Image} from 'react-native';
 import {CardSection} from './common/CardSection';
 import { Actions } from 'react-native-router-flux';
 import { Button } from './common';
@@ -12,11 +12,11 @@ class ListItem extends Component{
     }
 onPressCall(){
     // Communications.phonecall('+918518016290',true);
-    Communications.phonecall(this.props.phone,true);
+    Communications.phonecall('+91'+this.props.phone,true);
 
 }
 onPressSMS(){
-    Communications.text(this.props.employee.phone, `Here is your message`);
+    Communications.text('+91'+this.props.employee.phone, `Here is your message`);
 
 }
  onPressShare () {
@@ -41,41 +41,53 @@ onPressSMS(){
   };
 
 render(){
-    const {nameUser,phone} = this.props.employee;
+    const {nameUser,phone, dob, image, repeatValue} = this.props.employee;
 
-    // console.log("in List Item  Name ************", nameUser, "employeeeee---", this.props.employee); 
+     console.log("in List Item  Name ************", nameUser, "employeeeee---", this.props.employee); 
+    let  imageIcon  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+       
+         if(image){
+            imageIcon = image;
+        }
+        let repeatMessage = '';
+        if(repeatValue){
+            repeatMessage =  'Repeat reminder every'+' '+repeatValue;
+        }
     return(
         <TouchableWithoutFeedback onPress={this.onPressRow.bind(this)}>
         <View style={styles.viewOuter}>
             <View style={styles.viewInner}>
             
             <View style={styles.mainView}>
-                <View>
+            <View>
+              <Image source={{ uri: imageIcon }} style={styles.imageStyle} />
+            </View>
+                <View style={styles.leftView}>
                     <Text style={styles.titleStyle}>
                             {nameUser}
                         </Text>
                         <Text>
-                            {phone}
+                            +91-{phone}
+                        </Text>
+                        <Text>
+                            {dob}
+                        </Text>
+                        <Text>
+                           {repeatMessage}
                         </Text>
                 </View>
                     
                     <View style={styles.rightView}>
                         <TouchableOpacity onPress={() => this.onPressCall() }>
-                            <Text>
-                            Call
-                            </Text>
+                         <Image style={styles.callImg} source={require('../../assets/Call.png')} />
                         </TouchableOpacity>
                            
                         <TouchableOpacity onPress={() => this.onPressSMS() }>
-                            <Text>
-                            SMS
-                            </Text>
+                           <Image style={styles.message} source={require('../../assets/Message.png')} />
                         </TouchableOpacity>
                         
                         <TouchableOpacity onPress={() => this.onPressShare() }>
-                            <Text>
-                            Share 
-                            </Text>
+                           <Image style={styles.share} source={require('../../assets/Share.png')} />
                         </TouchableOpacity>
                     </View>
                 
@@ -91,6 +103,21 @@ render(){
 
 
 const styles={
+    callImg:{
+        width:32,
+        height:32
+    },
+    message:{
+        width:32,
+        height:32
+    },
+    share:{
+        width:32,
+        height:32
+    },
+    imageStyle:{
+        width: 70, height: 70, borderRadius:35, 
+    }, 
     mainView:{
      flexDirection: 'row',
      alignItems:'center'
@@ -98,6 +125,9 @@ const styles={
     titleStyle:{
         fontSize: 18,
         // paddingLeft: 5,
+    },
+    leftView:{
+      marginLeft: 5,
     },
     rightView:{
      right: '2%',
@@ -112,7 +142,7 @@ const styles={
      },
     viewInner:{
         padding: 15,
-        backgroundColor: 'white',
+        backgroundColor: '#f2f2f2',
         borderBottomColor : 'gray',
         borderWidth: 0.8,
         // borderLeftWidth: 0.5,
