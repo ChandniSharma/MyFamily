@@ -42,6 +42,8 @@ export const employeesFetch = () => {
 
 export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg, arrayEvents}) => {
 
+    console.log('In eidt mode ^^^^^^^^^^^^ ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents);
+
     const { currentUser } = firebase.auth();
 
     return(dispatch) =>{

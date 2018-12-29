@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Picker} from 'react-native';
+import {View, Text, Picker, Alert} from 'react-native';
 import { connect } from 'react-redux';
 import { EmployeeUpdate,EmployeeRecordCreate } from '../actions';
 
@@ -8,13 +8,20 @@ import EmployeeForm from './EmployeeForm';
 import {LinearGradient} from 'expo'; 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import * as constants from './Constants';
+import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
+import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
 
 
 class EmployeeCreate extends Component{
     
     onButtonPressed(){
 
-        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = this.props;     
+       
+
+        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = this.props;  
+        
+        console.log(' Events  ',arrayEvents);
+
         if(nameUser.trim() === '' || phone.trim() === '') {
             return;
          }else{
@@ -31,7 +38,7 @@ class EmployeeCreate extends Component{
                     }
             }
         
-        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || 'NO', bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || []});
+        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || []});
     }
 
     render(){
@@ -45,6 +52,13 @@ class EmployeeCreate extends Component{
                 colors={['#ffffff', '#ffffff', '#ffffff']}
                 >
                 <EmployeeForm  />
+                <PublisherBanner
+            style={styles.bottomBanner}
+                bannerSize="fullBanner"
+                adUnitID= {kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
+                testDeviceID="EMULATOR"
+                onDidFailToReceiveAdWithError={this.bannerError}
+                onAdMobDispatchAppEvent={this.adMobEvent} />
                 <Button  onPress={this.onButtonPressed.bind(this)}>
                         Save
                     </Button>
@@ -59,7 +73,11 @@ const styles = {
     pickerTextStyle:{
         fontSize: 18,
         paddingLeft: 20,
-    }
+    },
+    // bottomBanner: {
+    //     position: "absolute",
+    //     bottom: 0
+    //   },
 }
 
 const mapStateToProps = (state) =>{

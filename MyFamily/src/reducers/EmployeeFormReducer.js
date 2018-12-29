@@ -1,4 +1,5 @@
 import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE , EMPLOYEE_SAVE_SUCCESS, EMPLOYEE_DELETE_SUCCESS} from '../actions/types';
+import * as constants from '../components/Constants';
 
 const INITIAL_STATE = {
     name: '',
@@ -6,7 +7,7 @@ const INITIAL_STATE = {
     dob: '', 
     image:'', 
     repeatValue:'', 
-    isReminder:'NO',
+    isReminder:constants.kNo,
     bdayMsg: '',
     arrayEvents: []
 };

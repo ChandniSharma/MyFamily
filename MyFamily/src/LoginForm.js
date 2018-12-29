@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import { Card, CardSection, Input, Button, Spinner} from './components/common';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from './actions';
@@ -49,7 +49,7 @@ class LoginForm extends Component{
     renderError() {
         if(this.props.error){
             return(
-            <View style={{backgroundColor:'white'}}>
+            <View style={styles.errorView}>
                 <Text style={styles.errorTextStyle}>
                     {this.props.error}
                 </Text>
@@ -65,7 +65,7 @@ class LoginForm extends Component{
         }
         return(
             <Button onPress={this.onButtonPressed.bind(this)}>
-                                    Login
+                                    Login / Signup
             </Button>
         );
     }
@@ -85,6 +85,7 @@ class LoginForm extends Component{
                    colors={['#ffffff','#ffffff', '#ffffff']}
                    style= {styles.gradientStyle}
                 >
+                <Image style={styles.logoIcon} source={require('../assets/family.png')} />
             <View>
                 
                 <CardSection>
@@ -106,9 +107,9 @@ class LoginForm extends Component{
                     />
                 </CardSection>
 
-                <CardSection>
+               
                     {this.renderError()}
-                </CardSection>
+               
            
 
             {this.renderButton()}
@@ -139,10 +140,24 @@ const mapStateToProps = state => {
 };
 
 const styles = {
-    errorTextStyle:{
-        fontSize: 20,
-        color:'red',
+    errorView:{
+    //  backgroundColor:'red',
+     alignSelf:'center',
+     alignItems: 'center',
+     marginTop:10,
+     marginBottom:10
+    },
+    logoIcon:{
+        marginTop: '5%',
+        width: 212,
+        height: 179,
         alignSelf: 'center',
+        marginBottom: '5%',
+    },
+    errorTextStyle:{
+        fontSize: 22,
+        color:'red',
+        // backgroundColor:'blue',
     },
     gradientStyle:{
         flex: 1,
@@ -154,7 +169,8 @@ const styles = {
       },
       bottomBanner: {
         position: "absolute",
-        bottom: 0
+         bottom: 0,
+        // height:200,
       },
 }
 

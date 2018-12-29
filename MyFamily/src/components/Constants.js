@@ -45,5 +45,8 @@ export const kNo = 'No';
 export const kYear = 'year';
 export const kMonth = 'month';
 export const kWeek = 'week';
-export const kSelectedColor = 'pink';
+export const kSelectedColor = '#FF9F00';
 export const kNotSelectedColor = 'white'; // #ffffff
+
+export const iconBlueColor = '#006DF0';
+export const pinkColor = '#FC0239';

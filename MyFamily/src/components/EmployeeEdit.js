@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import { EmployeeUpdate, employeeSave, employeeDelete } from '../actions';
 import EmployeeForm from './EmployeeForm';
 import * as constants from './Constants';
+import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
+import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 
 
 class EmployeeEdit extends Component{
@@ -17,7 +20,7 @@ class EmployeeEdit extends Component{
         _.each(this.props.employee, (value, prop) => {
             this.props.EmployeeUpdate ({ prop, value});
         });
-        
+        console.log( 'in edit mode ', this.props);
     }
     onButtonPress(){
         const {nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg ,arrayEvents} = this.props;
@@ -33,12 +36,12 @@ class EmployeeEdit extends Component{
             constants.titleDelete,
             constants.msgDeleteMember,
             [
-              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {text: 'Ok', onPress: () => {this.onPressDelete()}},
+              {text: constants.titleCancel, onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: constants.titleOk, onPress: () => {this.onPressDelete()}},
             ],
             { cancelable: false }
           )
-    //    this.setState({showModal: true})
+    
     }
     onPressDelete(){
       this.props.employeeDelete({ uid: this.props.employee.uid})
@@ -50,9 +53,19 @@ class EmployeeEdit extends Component{
         console.log(" In Edit ", this.props.employee);
 
         return(
-            <View>
+            <KeyboardAwareScrollView  keyboardShouldPersistTaps={'always'}
+            style={{flex:1}}
+            showsVerticalScrollIndicator={true}>
+            
+            <View style={styles.viewStyle}>
                 <EmployeeForm {...this.props}/>
-
+                <PublisherBanner
+                // style={styles.bottomBanner}
+                bannerSize="fullBanner"
+                adUnitID= {kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
+                testDeviceID="EMULATOR"
+                onDidFailToReceiveAdWithError={this.bannerError}
+                onAdMobDispatchAppEvent={this.adMobEvent} />
                 <CardSection>
                     <Button onPress = {this.onButtonPress.bind(this)}>
                         Save Changes
@@ -73,13 +86,26 @@ class EmployeeEdit extends Component{
                     Are you sure you want to delete this member?
                 </Confirm> */}
 
-            </View>
+                </View>
+            </KeyboardAwareScrollView>
         );
     }
 }
 const mapStateToProps = (state) => {
   const {nameUser , phone ,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = state.employeeForm;
   return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} ;
+}
+
+const styles={
+    viewStyle:{
+     backgroundColor:'#ffffff',
+     alignSelf: 'center',
+     alignItems: 'center',
+    },
+    // bottomBanner: {
+    //     position: "absolute",
+    //     bottom: 0
+    //   },
 }
 
 export default connect (mapStateToProps , 

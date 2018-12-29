@@ -12,7 +12,7 @@ class ListItem extends Component{
     }
 onPressCall(){
     // Communications.phonecall('+918518016290',true);
-    Communications.phonecall('+91'+this.props.phone,true);
+    Communications.phonecall('+91'+this.props.employee.phone,true);
 
 }
 onPressSMS(){
@@ -23,7 +23,9 @@ onPressSMS(){
     try {
       const result = Share.share({
         message:
-          'This is very good application pls download it. ',
+          'Phone'+' '+'+91'+this.props.employee.phone+'\n'+'Birth Date'+' '+
+          this.props.employee.dob+'\n'+''
+
       })
 
       if (result.action === Share.sharedAction) {
@@ -43,7 +45,7 @@ onPressSMS(){
 render(){
     const {nameUser,phone, dob, image, repeatValue} = this.props.employee;
 
-     console.log("in List Item  Name ************", nameUser, "employeeeee---", this.props.employee); 
+     //console.log("in List Item  Name ************", nameUser, "employeeeee---", this.props.employee); 
     let  imageIcon  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
        
          if(image){

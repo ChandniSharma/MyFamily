@@ -32,11 +32,12 @@ state = {
 }
 
  componentDidMount(){
-     console.log('in Add Events ',this.props.arrayEvent );
+     console.log('in Add Events ',this.props.arrayEvents );
+
      let cloneArray = [];
-     if(Array.isArray(this.props.arrayEvent)){
-         if(this.props.arrayEvent.length>0){
-            cloneArray = this.props.arrayEvent.concat();
+     if(Array.isArray(this.props.arrayEvents)){
+         if(this.props.arrayEvents.length>0){
+            cloneArray = this.props.arrayEvents.concat();
             this.setState({places:cloneArray});
             console.log('places in didmount ', this.state.places, 'clone array ', cloneArray);
          }
@@ -46,6 +47,7 @@ state = {
  componentWillMount(){
      
  }
+
 
 placeSubmitHandler = () => {
     let alertMessage=''; 
@@ -194,8 +196,9 @@ render() {
   onClickBack(){
     //   console.log('on click back in add  ',this.state.places);
 
-      this.props.EmployeeUpdate({prop:'arrayEvent', value:this.state.places});
-      Actions.EmployeeCreate({arrayEvent:this.state.places});
+    //   this.props.EmployeeUpdate({prop:'arrayEvents', value:this.state.places});
+       Actions.EmployeeCreate({arrayEvents:this.state.places});
+      
 
 
     // this.props.navigation.navigate('Home',{
@@ -206,10 +209,10 @@ render() {
 }
 
 const mapStateToProps = (state) => {
-    const {arrayEvent } = state.employeeForm;
+    const {arrayEvents } = state.employeeForm;
 
     
-    return {arrayEvent};
+    return {arrayEvents};
 }
 
 export default connect (mapStateToProps, {EmployeeUpdate})(AddEvents);

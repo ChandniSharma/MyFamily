@@ -15,12 +15,14 @@ import * as constants from './Constants';
 
 
 
-let d1 = new Date();
-d1.setHours((new Date().getHours())+2);
-let reminderRepeatVal = constants.kYear;
+// let d1 = new Date();
+// d1.setHours((new Date().getHours())+2);
+// let reminderRepeatVal = constants.kYear;
 // let t = new Date();
 //   t.setSeconds(t.getSeconds() + 10);
-  
+
+
+
 class EmployeeForm extends Component{
     state ={
        image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
@@ -32,24 +34,48 @@ class EmployeeForm extends Component{
         isMonth: false,
         isWeek: false,
         charCount:200,
+        reminderAddOrNot:false,
        
         
     }
 
 componentDidMount(){
-    console.log(' data Event array', this.props.arrayEvent);
+    
+    // if (Array.isArray(this.props.employee.arrayEvents)) {
+    //     if(this.props.employee.arrayEvents.length>0){
+
+    //         let cloneArray = [];                
+    //          //this.props.arrayEvents = this.props.employee.arrayEvents;
+    //          cloneArray = this.props.employee.arrayEvents.concat();
+    //         this.props.arrayEvents = cloneArray;
+    //     }
+    // }
+    this.props.EmployeeUpdate({prop:'arrayEvents', value:this.props.arrayEvents});
+
     if (this.props.repeatValue === constants.kYear) {
-        this.setState({bgColorBtnYear:constants.kSelectedColor});
-        this.setState({bgColorBtnMonth:constants.kNotSelectedColor});
-        this.setState({bgColorBtnWeek:constants.kNotSelectedColor});
+        this.setState({
+            bgColorBtnYear:constants.kSelectedColor,
+            bgColorBtnMonth:constants.kNotSelectedColor,
+            bgColorBtnWeek:constants.kNotSelectedColor,
+            isYear:true
+        });
+        
     } else if(this.props.repeatValue === constants.kMonth){
-        this.setState({bgColorBtnYear:constants.kNotSelectedColor});
-        this.setState({bgColorBtnMonth:constants.kSelectedColor});
-        this.setState({bgColorBtnWeek:constants.kNotSelectedColor});
+        this.setState({
+            bgColorBtnYear:constants.kNotSelectedColor,
+            bgColorBtnMonth:constants.kSelectedColor,
+            bgColorBtnWeek:constants.kNotSelectedColor,
+            isMonth:true
+        });
+       
     }else{
-        this.setState({bgColorBtnYear:constants.kNotSelectedColor});
-        this.setState({bgColorBtnMonth:constants.kNotSelectedColor});
-        this.setState({bgColorBtnWeek:constants.kSelectedColor});
+        this.setState({
+            bgColorBtnYear:constants.kNotSelectedColor,
+            bgColorBtnMonth:constants.kNotSelectedColor,
+            bgColorBtnWeek:constants.kSelectedColor,
+            isWeek: true
+        });
+        
     }
     console.log('In emp form  bday msg length ', this.props.bdayMsg.length);
 
@@ -59,16 +85,49 @@ componentDidMount(){
 }
 
     onReminderBtnClick(){
+      console.log('reminder value is ', this.props.isReminder);
+
+      let timeMonth= new Date();
+      //   timeMonth.setSeconds(timeMonth.getSeconds() + 10);
+         timeMonth.setDate(timeMonth.getMonth()+1);
+
+         console.log( 'Adding date', timeMonth);
+
+         let timeWeek = new Date();
+            timeWeek.setDate(timeWeek.getDate()+7);
+
+            console.log( 'Adding 7 days ', timeWeek);
+
+        let timeYear = new Date();
+          timeYear.setDate(timeYear.gety()+1);
+
+console.log( 'year is ',timeYear);
+         console.log('adding   ')
+      
         if (this.props.isReminder === constants.kNo) {
            
-            this.props.EmployeeUpdate({prop:'isReminder', value:constants.kYes})
-           // Notifications.cancelAllScheduledNotificationsAsync();
+                
+                this.props.EmployeeUpdate({prop:'isReminder', value:constants.kYes})
+                this.setState({reminderAddOrNot:true});
+
+                if (this.state.isMonth) {
+                   
+                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionMonth);
+
+                } else if(this.state.isYear ){
+                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionYear);
+
+                }else{
+                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionWeek);
+
+                }
+            
         } else {
            
             this.props.EmployeeUpdate({prop:'isReminder', value:constants.kNo})
-
+            this.setState({reminderAddOrNot:false});
+             Notifications.cancelAllScheduledNotificationsAsync();
             // reminderRepeatVal = this.state.repeatValue;
-            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
         }
     }
 
@@ -92,6 +151,8 @@ componentDidMount(){
                 isMonth: false,
                 isWeek: false
             });
+            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionYear);
+
         }
        
     }
@@ -112,10 +173,12 @@ componentDidMount(){
                 bgColorBtnMonth: constants.kSelectedColor,
                 bgColorBtnYear: constants.kNotSelectedColor,
                 bgColorBtnWeek: constants.kNotSelectedColor,
-                    isMonth: false,
+                    isWeek: false,
                     isYear: false,
                     isMonth: true
             });
+            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionMonth);
+
         }
     }
     onWeekBtnClick(){
@@ -134,38 +197,45 @@ componentDidMount(){
                 isYear: false,
                 isWeek: true
             });
+            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionWeek);
+
         }
     }
-onChangeTextMessage(text){
-    console.log( 'text length ', text.length);
-    
-     this.setState({charCount:text.length})
-    
-        this.props.EmployeeUpdate({prop:'bdayMsg', value:text})
-    
-}
-onChangePhoneText(text){
-    this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})
-}
+    onChangeTextMessage(text){
+        console.log( 'text length ', text.length);
+        
+        this.setState({charCount:text.length})
+        
+            this.props.EmployeeUpdate({prop:'bdayMsg', value:text})
+        
+    }
+    onChangePhoneText(text){
+        this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})
+    }
+
 
     render(){
-        console.log("Emp form ", this.props);
-         let  image  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+        // console.log("Emp form render testing  ", this.props.employee.arrayEvents);
+
+         let image  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
        
          if(this.props.image){
             image = this.props.image;
         }
         let isAnotherEventAdd = false;
-        if (Array.isArray(this.props.arrayEvent)) {
-            if(this.props.arrayEvent.length>0){
-                isAnotherEventAdd = true
-            }
-        } 
-        let reminderAddOrNot = false;
-        if (this.props.isReminder === constants.kYes) {
-            reminderAddOrNot = true;
-        } 
-
+        
+        // if (Array.isArray(this.props.employee.arrayEvents)) {
+        //     if(this.props.employee.arrayEvents.length>0){
+        //         isAnotherEventAdd = true;
+        //     }
+        // } else
+         {
+            if (Array.isArray(this.props.arrayEvents)) {
+                if(this.props.arrayEvents.length>0){
+                    isAnotherEventAdd = true;
+                }
+            } 
+        }
         
         return(
             
@@ -198,7 +268,7 @@ onChangePhoneText(text){
                     charLimit={10}
                     keyboardType='numeric'
                     onChangeText={text =>  this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})}
-                />
+                 />
                 
                  </CardSection>
 
@@ -239,7 +309,7 @@ onChangePhoneText(text){
                         </Text>
                     <View style={styles.addReminderBtnView}> 
                                 <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onReminderBtnClick()}>
-                                      {reminderAddOrNot? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                      {this.state.reminderAddOrNot? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
                                     <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
                                        
                         </TouchableOpacity>
@@ -318,13 +388,15 @@ onChangePhoneText(text){
             this.props.EmployeeUpdate({prop:'image', value:result.uri})
         }
       };
+      
 }
 
 const localNotification = {
     title: 'Reminder',
     body: 'Hey today is the birth date of chandni', // (string) — body text of the notification.
     ios: { // (optional) (object) — notification configuration specific to iOS.
-      sound: true // (optional) (boolean) — if true, play a sound. Default: false.
+      sound: true, // (optional) (boolean) — if true, play a sound. Default: false.
+      vibrate: true
     },
 android: // (optional) (object) — notification configuration specific to Android.
     {
@@ -338,20 +410,36 @@ android: // (optional) (object) — notification configuration specific to Andro
     }
   };
 
-  let t = new Date();
-  t.setSeconds(t.getSeconds() + 10);
-  console.log( 'repeat value ', reminderRepeatVal)
-  const schedulingOptions = {
+  
+  let timeMonth= new Date();
+//   timeMonth.setSeconds(timeMonth.getSeconds() + 10);
+   timeMonth.setDate(timeMonth.getMonth()+1);
+
+   console.log( 'month time calculated ', timeMonth);
+
+  const schedulingOptionMonth = {
       
-    time: t, 
-    repeat: constants.kYear // Reminder repeat duration 
+    time: timeMonth, 
+   repeat: 'month' // Reminder repeat duration 
   };
 
-const mapStateToProps = (state) => {
-    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvent } = state.employeeForm;
+  let timeWeek = new Date();
+  timeWeek.setDate(timeWeek.getDate()+7);
 
-    
-    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvent};
+  const schedulingOptionWeek = {
+      time: timeWeek
+  }
+    let timeYear = new Date();
+    timeYear.setDate(timeYear.getFullYear()+1);
+
+  const schedulingOptionYear = {
+    time: timeYear,
+    repeat: 'year'
+  }
+
+const mapStateToProps = (state) => {
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents } = state.employeeForm;
+    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents};
 }
 
 const styles = {
@@ -371,12 +459,16 @@ const styles = {
         width: 100, height: 100, position: "absolute" , borderRadius:50
     }, 
     imageBtnStyle:{
+        marginTop:10,
         padding:10 ,
         width: 100, 
         height: 100 , 
         alignItems: 'center',
         justifyContent: 'center', 
-        position:'relative', alignSelf: 'center', borderRadius:50, backgroundColor:constants.kNotSelectedColor
+        position:'relative', 
+        alignSelf: 'center', 
+        borderRadius:50, 
+        backgroundColor:constants.kNotSelectedColor
     },
     addReminderBtnView:{
         marginTop: 10,  
@@ -406,7 +498,7 @@ const styles = {
     textLimit:{
         fontSize:12,
         position: 'absolute',
-        right: '13%',
+        right: '8%',
         bottom:'5%',
         color: 'gray',
     
