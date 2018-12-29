@@ -2,8 +2,9 @@
 
 
 import React, {Component} from 'react';
-import {View, Text, Alert} from 'react-native'
+import {View, Text, Alert, Image, TouchableOpacity} from 'react-native'
 import {Scene, Router, Actions} from 'react-native-router-flux';
+import {Button} from './common';
 import LoginForm from '../LoginForm';
 import EmployeeList from '../components/EmployeeList';
 import EmployeeCreate from '../components/EmployeeCreate';
@@ -11,6 +12,7 @@ import EmployeeEdit from './EmployeeEdit';
 import AddEvents from './AddEvents';
 import firebase from 'firebase';
 import * as constants from '../components/Constants';
+// import { Icon } from 'native-base';
 
  class  RouterComponent extends Component{
     signOutUserMessage = async () => {
@@ -50,23 +52,22 @@ import * as constants from '../components/Constants';
                     <Scene key ="EmployeeList" 
                     component = {EmployeeList} 
                     title = "Member List" 
-                    rightTitle="Add"
-                    onRight={()=>{ Actions.EmployeeCreate()}}
+                    
+                    renderRightButton = {() => this.addButton()}   
+                    
                     initial
                     />
                     <Scene key="EmployeeCreate" 
                     component={EmployeeCreate} 
                     title="Add Member" 
-                     rightTitle="Signout"
-                    onRight={()=> this.signOutUserMessage()}
-                    // rightButtonImage={require('../../assets/Power-Button.png')}
+                    renderRightButton={()=> this.signoutButton()}
+                    
                     />
                     <Scene key = "EmployeeEdit" 
                     component={EmployeeEdit} 
                     title = "Edit Detail" 
-                     rightTitle="Signout"
-                    onRight={()=> this.signOutUserMessage()}
-                    // rightButtonImage={require('../../assets/Power-Button.png')}
+                    renderRightButton={()=> this.signoutButton()}
+
                     />
 
                 <Scene key = "AddEvents" 
@@ -79,12 +80,40 @@ import * as constants from '../components/Constants';
             </Router>
         );
      }
+     addButton(){
+         return(
+         <TouchableOpacity style={styles.addButton} onPress={()=> Actions.EmployeeCreate()}>
+            <Image source={require('../../assets/plusIcon.png')} style={styles.addButtonImg}/>
+      </TouchableOpacity>
+      )
+     }
+     signoutButton(){
+        return(
+            <TouchableOpacity style={styles.addButton} onPress={()=> this.signOutUserMessage()}>
+               <Image source={require('../../assets/Power-Button.png')} style={styles.addButtonImg}/>
+         </TouchableOpacity>
+         )
+     }
     }
 
     const styles={
         navigationBarTitleStyle: {
          flex: 1,
          textAlign: 'center'
+     },
+     addButton:{
+        width: 64,
+        height: 64,
+         alignItems: 'center',
+         justifyContent: 'center',
+     },
+     addButtonImg:{
+        width: 42,
+        height: 42
+     },
+     logoutButton:{
+        width: 42,
+        height: 42
      }
    }; 
 

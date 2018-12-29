@@ -40,7 +40,6 @@ class EmployeeList extends Component{
             <View>
                 <Image style={styles.sadSmiley} source={require('../../assets/sad.png')} />
 
-                
                 <Text style={styles.emptyText}>
                     You don't have any member to display 
                 </Text>

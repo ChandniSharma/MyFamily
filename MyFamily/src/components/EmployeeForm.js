@@ -332,33 +332,7 @@ console.log( 'year is ',timeYear);
                         charLimit={100}
                         /> */}
                     </CardSection>
-                    <CardSection>
-                        <Text style= {styles.textStyle}>
-                            Repeat Reminder
-                        </Text>
-                        <View style={styles.repeatReminderView}> 
-
-                            <TouchableOpacity style={{borderWidth: 1, borderRadius: 3, marginLeft: 10, marginRight: 10, width: 50,
-                                            height: 50, backgroundColor:this.state.bgColorBtnYear, alignItems:'center', justifyContent:'center'}} onPress={() => this.onYearBtnClick()}>
-                                            <Text> 
-                                            Year 
-                                        </Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={{borderWidth: 1, borderRadius: 3, marginLeft: 10, marginRight: 10, width: 50,
-                                            height: 50, backgroundColor:this.state.bgColorBtnMonth, alignItems:'center', justifyContent:'center'}} onPress={() => this.onMonthBtnClick()}>
-                                            <Text> 
-                                            Month 
-                                        </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{borderWidth: 1, borderRadius: 3, marginLeft: 10, marginRight: 10, width: 50,
-                                            height: 50, backgroundColor:this.state.bgColorBtnWeek, alignItems:'center', justifyContent:'center'}} onPress={() => this.onWeekBtnClick()}>
-                                            <Text> 
-                                            Week 
-                                        </Text>
-                                </TouchableOpacity>
-                                        </View>
-                    </CardSection>
+                    
                     <CardSection>
                     <Text style= {styles.textStyle}>
                             Add another events
