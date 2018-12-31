@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, Alert} from 'react-native';
 import { Card, CardSection, Input, Button, Spinner} from './components/common';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from './actions';
@@ -9,7 +9,7 @@ import { AsyncStorage } from "react-native";
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './components/Constants';
-
+import * as constants from './components/Constants';
 
 
 class LoginForm extends Component{
@@ -41,6 +41,35 @@ class LoginForm extends Component{
     }
     onButtonPressed(){
         const {email, password} = this.props;
+
+       
+        if (email.trim() === '' || password.trim() === '') {
+            
+                Alert.alert(
+                constants.validationTitle,
+                constants.msgEmptyCredentials,
+                [
+                    {text: constants.titleOk, onPress: () => console.log('Ok Pressed'), style: 'cancel'},
+                ],
+                { cancelable: false }
+                )
+           return;
+        } else {
+            
+                if(password.length<6){
+                    Alert.alert(
+                    constants.validationTitle,
+                    constants.msgCharLimitPwd,
+                    [
+                        {text: constants.titleOk, onPress: () => console.log('Ok Pressed'), style: 'cancel'},
+                    ],
+                    { cancelable: false }
+                    )
+                    return;
+                }
+        }
+
+       
         this.props.loginUser({email, password});
         if (this.props.user) {
             this.props.navigation.navigate('EmployeeList');

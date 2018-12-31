@@ -24,6 +24,9 @@ export const msgSubCitySelect = 'Please select the subcity.'
 export const msgTypeSelect = 'Please select the type.'
 export const msgTimeSelect = 'Please select the time.'
 export const msgAddEvent = 'Please add Event.'
+export const msgCharLimitPwd = 'Please enter atleast 6 character password';
+export const validationTitle = 'Oops!';
+export const msgEmptyCredentials = 'Please enter your credentials';
 
 // Profile view alert message
 export const msgLogout = 'Are you sure to logout from the application';
@@ -32,7 +35,6 @@ export const msgProfileUpdate = 'Your profile update successfully.';
 
 // Add Event view 
 export const msgEventAddLimit = 'You can add only 5 events';
-
 export const messageCharLimit = 'You can add only 200 characters.';
 
 export const titleDelete = 'Delete Member?';

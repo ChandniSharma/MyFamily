@@ -35,7 +35,7 @@ class EmployeeForm extends Component{
         isWeek: false,
         charCount:200,
         reminderAddOrNot:false,
-       
+        isEmergencyFlag:false,
         
     }
 
@@ -82,36 +82,39 @@ componentDidMount(){
     if(this.props.bdayMsg.length>0){
         this.setState({charCount:this.props.bdayMsg.length});
     }
+
+    // For setting value received from DB. 
+    this.onEmergencyCallBtnClick();
+    this.onReminderBtnClick();
 }
 
     onReminderBtnClick(){
       console.log('reminder value is ', this.props.isReminder);
 
-      let timeMonth= new Date();
-      //   timeMonth.setSeconds(timeMonth.getSeconds() + 10);
-         timeMonth.setDate(timeMonth.getMonth()+1);
+    //   let timeMonth= new Date();
+    //   //   timeMonth.setSeconds(timeMonth.getSeconds() + 10);
+    //      timeMonth.setDate(timeMonth.getMonth()+1);
 
-         console.log( 'Adding date', timeMonth);
+    //      console.log( 'Adding date', timeMonth);
 
-         let timeWeek = new Date();
-            timeWeek.setDate(timeWeek.getDate()+7);
+    //      let timeWeek = new Date();
+    //         timeWeek.setDate(timeWeek.getDate()+7);
 
-            console.log( 'Adding 7 days ', timeWeek);
+    //         console.log( 'Adding 7 days ', timeWeek);
 
-        let timeYear = new Date();
-          timeYear.setDate(timeYear.gety()+1);
+    //     let timeYear = new Date();
+    //       timeYear.setDate(timeYear.gety()+1);
 
-console.log( 'year is ',timeYear);
-         console.log('adding   ')
+    //        console.log( 'year is ',timeYear);
+    //      console.log('adding   ')
       
-        if (this.props.isReminder === constants.kNo) {
+        if (this.props.isReminder && this.props.isReminder === constants.kNo) {
            
                 
                 this.props.EmployeeUpdate({prop:'isReminder', value:constants.kYes})
                 this.setState({reminderAddOrNot:true});
 
                 if (this.state.isMonth) {
-                   
                     Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionMonth);
 
                 } else if(this.state.isYear ){
@@ -131,6 +134,19 @@ console.log( 'year is ',timeYear);
         }
     }
 
+    onEmergencyCallBtnClick(){
+        console.log('this. emergency call ', this.props.isEmergencyCall);
+
+        if (this.props.isEmergencyCall && this.props.isEmergencyCall == constants.kNo) {
+
+            this.props.EmployeeUpdate({prop:'isEmergencyCall', value:constants.kYes})
+            this.setState({isEmergencyFlag:true});
+
+        } else {
+            this.props.EmployeeUpdate({prop:'isEmergencyCall', value:constants.kNo})
+            this.setState({isEmergencyFlag:false});
+        }
+    }
     onAddEventBtnClick(){
             Actions.AddEvents();        
     }
@@ -238,7 +254,6 @@ console.log( 'year is ',timeYear);
         }
         
         return(
-            
             <View>
             <TouchableOpacity style={styles.imageBtnStyle } onPress= {this._pickImage}>
                                 <Text style={{alignSelf:'center'}}>
@@ -247,8 +262,7 @@ console.log( 'year is ',timeYear);
              <Image source={{ uri: image }} style={styles.imageStyle} />
              
                 </TouchableOpacity>
-    
-                
+               
                 <CardSection>
                     <Input 
                     label="Name"
@@ -271,9 +285,19 @@ console.log( 'year is ',timeYear);
                  />
                 
                  </CardSection>
-
                  <CardSection>
-
+                 <Text style= {styles.textStyle}>
+                            Mark this no. for emergency call
+                        </Text>
+                    <View style={styles.addReminderBtnView}> 
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onEmergencyCallBtnClick()}>
+                                      {this.state.isEmergencyFlag? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
+                                       
+                        </TouchableOpacity>
+                    </View>
+                    </CardSection>
+                 <CardSection>
                  <Text style={styles.textStyle}>
                      Date Of Birth
                  </Text>
@@ -313,9 +337,11 @@ console.log( 'year is ',timeYear);
                                     <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
                                        
                         </TouchableOpacity>
-                                        
                     </View>
                     </CardSection>
+
+                   
+                   
                     <CardSection>
                     <MessageInput
                         onChangeText={text =>  this.onChangeTextMessage(text)}
@@ -412,8 +438,8 @@ android: // (optional) (object) — notification configuration specific to Andro
   }
 
 const mapStateToProps = (state) => {
-    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents } = state.employeeForm;
-    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents};
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents,isEmergencyCall } = state.employeeForm;
+    return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents,isEmergencyCall};
 }
 
 const styles = {

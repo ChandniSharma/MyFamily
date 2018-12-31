@@ -9,7 +9,8 @@ const INITIAL_STATE = {
     repeatValue:'', 
     isReminder:constants.kNo,
     bdayMsg: '',
-    arrayEvents: []
+    arrayEvents: [],
+    isEmergencyCall:constants.kNo,
 };
 
 export default (state = INITIAL_STATE, action) => {

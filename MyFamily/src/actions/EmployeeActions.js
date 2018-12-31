@@ -9,13 +9,13 @@ export const EmployeeUpdate = ({prop, value}) => {
         };
 }
 
-export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents}) => {
-   console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents);
+export const EmployeeRecordCreate = ({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents,isEmergencyCall}) => {
+   console.log('Create Action ********* ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents,isEmergencyCall);
   const { currentUser } = firebase.auth();
 
   return (dispatch) => {
     firebase.database().ref(`/users/${currentUser.uid}/employees`)
-    .push({nameUser,phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents})
+    .push({nameUser,phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents,isEmergencyCall})
     .then(() => {
         dispatch({type:EMPLOYEE_CREATE});
         Actions.EmployeeList({type: 'reset'})
@@ -40,15 +40,15 @@ export const employeesFetch = () => {
     };
 };
 
-export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg, arrayEvents}) => {
+export const employeeSave = ({nameUser, phone, dob, image, repeatValue, isReminder, uid , bdayMsg, arrayEvents,isEmergencyCall}) => {
 
-    console.log('In eidt mode ^^^^^^^^^^^^ ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents);
+    console.log('In eidt mode ^^^^^^^^^^^^ ',nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents,isEmergencyCall);
 
     const { currentUser } = firebase.auth();
 
     return(dispatch) =>{
         firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
-          .set({ nameUser , phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents })
+          .set({ nameUser , phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents,isEmergencyCall })
           .then(() => {
             dispatch({type:EMPLOYEE_SAVE_SUCCESS});
             Actions.EmployeeList({type: 'reset'});

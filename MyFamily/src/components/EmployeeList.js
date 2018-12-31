@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
-import {View, Text, ListView, Image} from 'react-native';
+import {View, Text, ListView, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
@@ -8,7 +8,8 @@ import { Button } from './common';
 import { Actions } from 'react-native-router-flux';
 import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
 import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
-
+import Communications from 'react-native-communications';
+//import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 class EmployeeList extends Component{
 
     componentWillMount(){
@@ -37,7 +38,7 @@ class EmployeeList extends Component{
 
         }else{
             return( 
-            <View>
+            <View style = {styles.emptyMessageView}>
                 <Image style={styles.sadSmiley} source={require('../../assets/sad.png')} />
 
                 <Text style={styles.emptyText}>
@@ -59,11 +60,22 @@ class EmployeeList extends Component{
     adMobEvent(){
         console.log( 'in admob event method ');
     }
+    emergencyCall(){
+// use react-native-immediate-phone-call when update to react native from expo
+  console.log(' ****  emergencyBtnClick ');
+        // RNImmediatePhoneCall.immediatePhoneCall('0123456789');
+    }
 
     render(){
         
         return(
             <View style={styles.mainView}>
+            <View style= {styles.emergencyBtn}>
+            <TouchableOpacity onPress={()=>this.emergencyCall()}>
+                    <Image style={styles.emergencyCallImg} source={require('../../assets/CallEmergency.png')}/>
+                </TouchableOpacity>
+            </View>
+                
                  <ListView style={styles.listStyle}
                     enableEmptySections
                     dataSource={this.dataSource}
@@ -80,9 +92,6 @@ class EmployeeList extends Component{
             </View>
            
         );
-        
-
-        
     }
 }
 const mapStateToProps = state => {
@@ -96,9 +105,30 @@ const styles={
     mainView:{
        flex: 1,
     },
+    emptyMessageView:{
+        backgroundColor:'yellow', 
+        // width: '70%',
+    },
     titleStyle:{
         fontSize: 18,
         paddingLeft: 15,
+    },
+    emergencyBtn:{
+
+        marginTop:'5%',
+        right: '2%',
+        marginBottom: '5%',
+       
+        // backgroundColor:'green',
+        
+        alignItems: 'center',
+        justifyContent:'center',
+    //    position: 'absolute'
+    },
+    emergencyCallImg:{
+        width:32,
+        height:32,
+        alignSelf:'center'
     },
     listStyle:{
       paddingTop :'5%',

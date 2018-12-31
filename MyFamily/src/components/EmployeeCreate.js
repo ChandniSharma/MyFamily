@@ -15,14 +15,19 @@ import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Const
 class EmployeeCreate extends Component{
     
     onButtonPressed(){
-
-       
-
-        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = this.props;  
+        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = this.props;  
         
         console.log(' Events  ',arrayEvents);
 
         if(nameUser.trim() === '' || phone.trim() === '') {
+            Alert.alert(
+                constants.validationTitle,
+                constants.msgEmptyCredentials,
+                [
+                    {text: constants.titleOk, onPress: () => console.log('Ok Pressed'), style: 'cancel'},
+                ],
+                { cancelable: false }
+                )
             return;
          }else{
                 if (phone.length === 0 || phone.length!=10) {
@@ -38,7 +43,7 @@ class EmployeeCreate extends Component{
                     }
             }
         
-        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || []});
+        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo});
     }
 
     render(){
@@ -48,9 +53,7 @@ class EmployeeCreate extends Component{
             style={{flex:1}}
             showsVerticalScrollIndicator={true}>
              <View> 
-                 <LinearGradient
-                colors={['#ffffff', '#ffffff', '#ffffff']}
-                >
+                 
                 <EmployeeForm  />
                 <PublisherBanner
             style={styles.bottomBanner}
@@ -62,7 +65,7 @@ class EmployeeCreate extends Component{
                 <Button  onPress={this.onButtonPressed.bind(this)}>
                         Save
                     </Button>
-                </LinearGradient>
+                
             </View>
             </KeyboardAwareScrollView>
         );
@@ -81,9 +84,9 @@ const styles = {
 }
 
 const mapStateToProps = (state) =>{
-    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = state.employeeForm;
+    const {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = state.employeeForm;
     return{
-        nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents
+        nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents,isEmergencyCall
     };
 
   };

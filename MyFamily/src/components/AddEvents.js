@@ -50,7 +50,7 @@ state = {
 
 
 placeSubmitHandler = () => {
-    let alertMessage=''; 
+    
     if(this.state.placeName.trim() === '' || this.state.dateEvent.trim() === '') {
     return;
     }else{
@@ -196,11 +196,9 @@ render() {
   onClickBack(){
     //   console.log('on click back in add  ',this.state.places);
 
-    //   this.props.EmployeeUpdate({prop:'arrayEvents', value:this.state.places});
+       this.props.EmployeeUpdate({prop:'arrayEvents', value:this.state.places});
        Actions.EmployeeCreate({arrayEvents:this.state.places});
       
-
-
     // this.props.navigation.navigate('Home',{
     //     itemId: 86,
     //     otherParam: 'anything you want here',
