@@ -15,7 +15,7 @@ const InputEvent = ({label,value, onChangeText, placeholder, secureTextEntry,key
                 textColor='#000000'
                 baseColor = '#656565'
                 fontSize={18}
-                // characterRestriction={charLimit}
+              characterRestriction={charLimit}
                 containerStyle={viewContainerStyle}
                 inputContainerStyle={textInputStyle}
                 secureTextEntry={secureTextEntry}
@@ -43,7 +43,7 @@ export default InputEvent;
 const styles = {
 
     viewContainerStyle:{
-     width:'40%',
+     width:'45%',
      flexDirection: 'row',
      borderColor: 'gray',
      borderWidth: 1,

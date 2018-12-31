@@ -11,6 +11,7 @@ import {CardSection, Card, Button} from './common';
 import { EmployeeUpdate } from '../actions';
 import { connect } from 'react-redux';
 
+
 const DismissKeyboardHOC = (Comp) => {
     return ({ children, ...props }) => (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -29,6 +30,7 @@ state = {
     places: [],
     dateEvent: '',
     message:'',
+    reminderAddOrNot:constants.kNo,
 }
 
  componentDidMount(){
@@ -51,7 +53,7 @@ state = {
 
 placeSubmitHandler = () => {
     
-    if(this.state.placeName.trim() === '' || this.state.dateEvent.trim() === '') {
+    if(this.state.placeName.trim() === '' || this.state.dateEvent.trim() === '' || this.state.placeName.length>20) {
     return;
     }else{
        
@@ -67,13 +69,11 @@ placeSubmitHandler = () => {
                return;   
         }
        }      
-    
-    
         this.setState(prevState => {
             return {
                     places: prevState.places.concat({
                     key: Math.random(), 
-                    value: prevState.placeName+' '+':'+' '+prevState.dateEvent+' '+'Msg:'+prevState.message
+                    value: prevState.placeName+' '+':'+' '+prevState.dateEvent+' '+'Msg:'+prevState.message+'Reminder'+prevState.reminderAddOrNot
             })
             }
         });
@@ -81,9 +81,19 @@ placeSubmitHandler = () => {
    this.setState({
       placeName: '',
       dateEvent: '',
-      message:''
+      message:'',
+      reminderAddOrNot:constants.kNo,
    });	
 }
+onReminderBtnClick(){
+      if (this.state.reminderAddOrNot === constants.kNo) {
+              
+              this.setState({reminderAddOrNot:constants.kYes});
+      } else {
+          this.setState({reminderAddOrNot:constants.kNo});
+          
+      }
+  }
 
 placeNameChangeHandler = (value) => {
   this.setState({
@@ -122,6 +132,12 @@ onItemDeleted = (key) => {
 }
 
 render() {
+    let imgClock;
+    if(this.state.reminderAddOrNot === constants.kYes){
+        imgClock =  <Image source={require('../../assets/activeAlarm.png')} style={styles.alarmStyle} />
+    }else{
+        imgClock = <Image source={require('../../assets/InactiveAlarm.png')} style={styles.alarmStyle} />
+    }
    return (
     <View style={{flex: 1, backgroundColor:'#ffffff'}}> 
    
@@ -133,6 +149,7 @@ render() {
                     placeholder={'Chandni'}
                     value={this.state.placeName}
                     onChangeText={this.placeNameChangeHandler }
+                    charLimit={20}
                     />
                      <DatePicker
                             style={styles.datePickerStyle}
@@ -172,9 +189,21 @@ render() {
                     value={this.state.message}
                     onChangeText={(text) => this.setState({message:text})}
                     />
+                     <Text style={styles.textLimit}>
+                            {this.state.message.length}/200
+                    </Text>
         </CardSection>
         
-
+        <CardSection>
+                    <Text style= {styles.textStyle}>
+                            Add Reminder
+                        </Text>
+                    <View style={styles.addReminderBtnView}> 
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onReminderBtnClick()}>
+                                      {imgClock}   
+                               </TouchableOpacity>
+                    </View>
+                    </CardSection>
             <View style = { styles.listContainer }>
                 { this.placesOutput() }
            </View>
@@ -221,6 +250,10 @@ const styles = StyleSheet.create({
     	  justifyContent: 'flex-start',
           alignItems: 'center',
           
+      },
+      alarmStyle:{
+        width:32,
+        height:32
       },
       messageView:{
         marginTop: 10,
@@ -284,5 +317,21 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         borderRadius: 20
     },
-
+    textLimit:{
+        fontSize:12,
+        position: 'absolute',
+        right: '8%',
+        bottom:'5%',
+        color: 'gray',
+    
+    },
+    textStyle:{
+        fontSize:17, color: 'black', justifyContent:'center', marginLeft:15,
+        marginTop: 10
+    },
+    addReminderBtnView:{
+        marginTop: 10,  
+        marginLeft:10,
+       
+    },
 });

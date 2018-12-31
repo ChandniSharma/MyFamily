@@ -84,56 +84,21 @@ componentDidMount(){
     }
 
     // For setting value received from DB. 
-    this.onEmergencyCallBtnClick();
-    this.onReminderBtnClick();
+
+    if(this.props.isEmergencyCall === constants.kNo){
+        this.setState({isEmergencyFlag:false});
+    }else{
+        this.setState({isEmergencyFlag:true});
+    }
+    if (this.props.isReminder === constants.kNo) {
+        this.setState({reminderAddOrNot:false});
+    } else {
+        this.setState({reminderAddOrNot:true});
+    }
+    
 }
 
-    onReminderBtnClick(){
-      console.log('reminder value is ', this.props.isReminder);
-
-    //   let timeMonth= new Date();
-    //   //   timeMonth.setSeconds(timeMonth.getSeconds() + 10);
-    //      timeMonth.setDate(timeMonth.getMonth()+1);
-
-    //      console.log( 'Adding date', timeMonth);
-
-    //      let timeWeek = new Date();
-    //         timeWeek.setDate(timeWeek.getDate()+7);
-
-    //         console.log( 'Adding 7 days ', timeWeek);
-
-    //     let timeYear = new Date();
-    //       timeYear.setDate(timeYear.gety()+1);
-
-    //        console.log( 'year is ',timeYear);
-    //      console.log('adding   ')
-      
-        if (this.props.isReminder && this.props.isReminder === constants.kNo) {
-           
-                
-                this.props.EmployeeUpdate({prop:'isReminder', value:constants.kYes})
-                this.setState({reminderAddOrNot:true});
-
-                if (this.state.isMonth) {
-                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionMonth);
-
-                } else if(this.state.isYear ){
-                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionYear);
-
-                }else{
-                    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionWeek);
-
-                }
-            
-        } else {
-           
-            this.props.EmployeeUpdate({prop:'isReminder', value:constants.kNo})
-            this.setState({reminderAddOrNot:false});
-             Notifications.cancelAllScheduledNotificationsAsync();
-            // reminderRepeatVal = this.state.repeatValue;
-        }
-    }
-
+   
     onEmergencyCallBtnClick(){
         console.log('this. emergency call ', this.props.isEmergencyCall);
 
@@ -285,18 +250,7 @@ componentDidMount(){
                  />
                 
                  </CardSection>
-                 <CardSection>
-                 <Text style= {styles.textStyle}>
-                            Mark this no. for emergency call
-                        </Text>
-                    <View style={styles.addReminderBtnView}> 
-                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onEmergencyCallBtnClick()}>
-                                      {this.state.isEmergencyFlag? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
-                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
-                                       
-                        </TouchableOpacity>
-                    </View>
-                    </CardSection>
+                
                  <CardSection>
                  <Text style={styles.textStyle}>
                      Date Of Birth
@@ -326,42 +280,25 @@ componentDidMount(){
                             }}
                             onDateChange={(date) => this.props.EmployeeUpdate({prop:'dob', value:date})}
                         />
+                        
                  </CardSection>
+                 
+                   
                     <CardSection>
-                    <Text style= {styles.textStyle}>
-                            Add Reminder
+                        <Text style= {styles.textStyle}>
+                                    Mark this no. for emergency call
                         </Text>
-                    <View style={styles.addReminderBtnView}> 
-                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onReminderBtnClick()}>
-                                      {this.state.reminderAddOrNot? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
-                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
+                       <View style={styles.addReminderBtnView}> 
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onEmergencyCallBtnClick()}>
+                                      {this.state.isEmergencyFlag? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                 <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
                                        
                         </TouchableOpacity>
-                    </View>
+                       </View>
                     </CardSection>
-
-                   
-                   
-                    <CardSection>
-                    <MessageInput
-                        onChangeText={text =>  this.onChangeTextMessage(text)}
-                        value={this.props.bdayMsg}
-                      />
-                       <Text style={styles.textLimit}>
-                            {this.props.bdayMsg.length}/200
-                    </Text>
-                        {/* <MessageInput 
-                        label="Message"
-                        placeholder="Write your wishes and blessings !!! "
-                        onChangeText={text => this.props.EmployeeUpdate({prop:'bdayMsg', value:text})}
-                        value={this.props.bdayMsg}
-                        charLimit={100}
-                        /> */}
-                    </CardSection>
-                    
                     <CardSection>
                     <Text style= {styles.textStyle}>
-                            Add another events
+                            Add events
                         </Text>
                     <View style={styles.addReminderBtnView}> 
                                 <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onAddEventBtnClick()}>
@@ -448,11 +385,11 @@ const styles = {
         paddingLeft: 20,
     },
     textStyle:{
-        fontSize:17, color: 'black', justifyContent:'center', marginLeft:10,
+        fontSize:17, color: 'black', justifyContent:'center', marginLeft:15,
         marginTop: 10
     },
     datePickerStyle:{
-        width: "40%",
+        width: "62%",
         marginLeft: 20,
     },
     imageStyle:{
@@ -472,14 +409,17 @@ const styles = {
     },
     addReminderBtnView:{
         marginTop: 10,  
-        marginBottom:10,
+       
         marginLeft:10,
        
+    },
+    emergencyView:{
+     marginTop:10,
+     marginLeft:10,
     },
     repeatReminderView:{
         flexDirection: 'row',
         flex: 1,
-        
     },
      yearBtn:{
         borderWidth: 1,

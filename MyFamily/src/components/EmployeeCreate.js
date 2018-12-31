@@ -52,7 +52,7 @@ class EmployeeCreate extends Component{
             <KeyboardAwareScrollView  keyboardShouldPersistTaps={'always'}
             style={{flex:1}}
             showsVerticalScrollIndicator={true}>
-             <View> 
+             <View style={styles.mainView}> 
                  
                 <EmployeeForm  />
                 <PublisherBanner
@@ -73,6 +73,10 @@ class EmployeeCreate extends Component{
 }
 
 const styles = {
+    mainView:{
+        backgroundColor:'#ffffff',
+
+    },
     pickerTextStyle:{
         fontSize: 18,
         paddingLeft: 20,
