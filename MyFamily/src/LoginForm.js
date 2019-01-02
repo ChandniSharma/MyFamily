@@ -114,7 +114,7 @@ class LoginForm extends Component{
                    colors={['#ffffff','#ffffff', '#ffffff']}
                    style= {styles.gradientStyle}
                 >
-                <Image style={styles.logoIcon} source={require('../assets/family.png')} />
+                {/* <Image style={styles.logoIcon} source={require('../assets/family.png')} /> */}
             <View>
                 
                 <CardSection>

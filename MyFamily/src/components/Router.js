@@ -81,6 +81,7 @@ import * as constants from '../components/Constants';
         );
      }
      addButton(){
+        this.props.employeeRecordRefresh();
          return(
          <TouchableOpacity style={styles.addButton} onPress={()=> Actions.EmployeeCreate()}>
             <Image source={require('../../assets/plusIcon.png')} style={styles.addButtonImg}/>

@@ -47,6 +47,9 @@ export const kNo = 'No';
 export const kYear = 'year';
 export const kMonth = 'month';
 export const kWeek = 'week';
+export const kCreateClass = 'EmployeeCreate';
+export const kEditClass = 'EmployeeEdit';
+export const kClassNameComeFrom = 'classNameComeFrom';
 export const kSelectedColor = '#FF9F00';
 export const kNotSelectedColor = 'white'; // #ffffff
 

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import {View, Text, Picker, Alert } from 'react-native';
+import {View, Text, Picker, Alert, FlatList,AsyncStorage} from 'react-native';
 import Communications from 'react-native-communications';
 import { CardSection, Card, Button, Confirm } from './common';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import * as constants from './Constants';
 import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
 import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
-
+import ListItem from './common/ListItem';
 
 class EmployeeEdit extends Component{
     state = {
@@ -20,17 +20,20 @@ class EmployeeEdit extends Component{
         _.each(this.props.employee, (value, prop) => {
             this.props.EmployeeUpdate ({ prop, value});
         });
-        console.log( 'in edit mode ', this.props);
+    }
+    logInToken = async (token) => {
+        await AsyncStorage.setItem(constants.kClassNameComeFrom,token)
+    }
+    componentDidMount(){
+        this.logInToken(constants.kEditClass);
     }
     onButtonPress(){
-        const {nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg ,arrayEvents} = this.props;
+        const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = this.props;  
+
         console.log(" In Edit btn press ", this.props);
-        this.props.employeeSave({nameUser, phone, dob, image, repeatValue, isReminder,bdayMsg, arrayEvents, uid: this.props.employee.uid});
+        this.props.employeeSave({nameUser:nameUser || '', phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo, uid: this.props.employee.uid});
     }
-    onTextPress(){
-      const {phone, shift} = this.props;
-      Communications.text(phone, `Your upcoming shift is on ${shift}`);
-    }
+    
     onFireEmployeePress(){
         Alert.alert(
             constants.titleDelete,
@@ -45,10 +48,30 @@ class EmployeeEdit extends Component{
     }
     onPressDelete(){
       this.props.employeeDelete({ uid: this.props.employee.uid})
+
     }
     onDecline(){
         this.setState({showModal: false})
     }
+    eventList = () => {
+        return (
+            <View style={styles.listContainer}>
+                    <FlatList
+                        data = { this.props.arrayEvents }
+                        scrollEnabled={true}
+                        marginBottom={50}
+                        keyExtractor={(item, index) => index.toString()}
+                            renderItem = { info => (
+                            <ListItem 
+                                placeName={ info.item.value }
+                            //  onItemPressed={() => this.onItemDeleted(info.item.key)}
+                            />
+                            )}
+                        />
+            </View>
+            
+            )
+        }
     render(){
         console.log(" In Edit ", this.props.employee);
 
@@ -59,25 +82,31 @@ class EmployeeEdit extends Component{
             
             <View style={styles.viewStyle}>
                 <EmployeeForm {...this.props}/>
-                <PublisherBanner
+               
+                <CardSection>
+                    <Button onPress = {this.onButtonPress.bind(this)}>
+                        Save Changes
+                    </Button>
+                    <Button onPress={this.onFireEmployeePress.bind(this)}>
+                         Delete Member
+                    </Button>
+                </CardSection>
+                {/* <View style = { styles.listContainer }>
+                { this.eventList() }
+                 </View> */}
+                {/* <CardSection>
+                    <Button onPress={this.onFireEmployeePress.bind(this)}>
+                         Delete Member
+                    </Button>
+                </CardSection> */}
+               
+                {/* <PublisherBanner
                 // style={styles.bottomBanner}
                 bannerSize="fullBanner"
                 adUnitID= {kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
                 testDeviceID="EMULATOR"
                 onDidFailToReceiveAdWithError={this.bannerError}
-                onAdMobDispatchAppEvent={this.adMobEvent} />
-                <CardSection>
-                    <Button onPress = {this.onButtonPress.bind(this)}>
-                        Save Changes
-                    </Button>
-                </CardSection>
-
-                <CardSection>
-                    <Button onPress={this.onFireEmployeePress.bind(this)}>
-                         Delete Member
-                    </Button>
-                </CardSection>
-
+                onAdMobDispatchAppEvent={this.adMobEvent} /> */}
                 {/* <Confirm 
                   visible={this.state.showModal}
                   onAccept= {this.onAccept.bind(this)}
@@ -92,8 +121,8 @@ class EmployeeEdit extends Component{
     }
 }
 const mapStateToProps = (state) => {
-  const {nameUser , phone ,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} = state.employeeForm;
-  return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents} ;
+  const {nameUser , phone ,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents,isEmergencyCall} = state.employeeForm;
+  return {nameUser, phone,  dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} ;
 }
 
 const styles={

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as constants  from '../Constants';
 
+
+
 const ListItem = (props) => {
     let arrayTemp = props.placeName.split('Msg:')
     console.log('complete string ', props.placeName,'array ',arrayTemp)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, Image, TextInput,FlatList, AsyncStorage } from 'react-native';
 
 import { CardSection, Input, Button } from './common';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import { Actions } from 'react-native-router-flux';
 import AddEvents from './AddEvents';
 import * as constants from './Constants';
-
+import ListItem from './common/ListItem';
 
 
 // let d1 = new Date();
@@ -36,52 +36,12 @@ class EmployeeForm extends Component{
         charCount:200,
         reminderAddOrNot:false,
         isEmergencyFlag:false,
-        
+        classNameComeFrom:''
     }
 
 componentDidMount(){
     
-    // if (Array.isArray(this.props.employee.arrayEvents)) {
-    //     if(this.props.employee.arrayEvents.length>0){
-
-    //         let cloneArray = [];                
-    //          //this.props.arrayEvents = this.props.employee.arrayEvents;
-    //          cloneArray = this.props.employee.arrayEvents.concat();
-    //         this.props.arrayEvents = cloneArray;
-    //     }
-    // }
-    this.props.EmployeeUpdate({prop:'arrayEvents', value:this.props.arrayEvents});
-
-    if (this.props.repeatValue === constants.kYear) {
-        this.setState({
-            bgColorBtnYear:constants.kSelectedColor,
-            bgColorBtnMonth:constants.kNotSelectedColor,
-            bgColorBtnWeek:constants.kNotSelectedColor,
-            isYear:true
-        });
-        
-    } else if(this.props.repeatValue === constants.kMonth){
-        this.setState({
-            bgColorBtnYear:constants.kNotSelectedColor,
-            bgColorBtnMonth:constants.kSelectedColor,
-            bgColorBtnWeek:constants.kNotSelectedColor,
-            isMonth:true
-        });
-       
-    }else{
-        this.setState({
-            bgColorBtnYear:constants.kNotSelectedColor,
-            bgColorBtnMonth:constants.kNotSelectedColor,
-            bgColorBtnWeek:constants.kSelectedColor,
-            isWeek: true
-        });
-        
-    }
-    console.log('In emp form  bday msg length ', this.props.bdayMsg.length);
-
-    if(this.props.bdayMsg.length>0){
-        this.setState({charCount:this.props.bdayMsg.length});
-    }
+    this._getStorageValue();
 
     // For setting value received from DB. 
 
@@ -90,18 +50,21 @@ componentDidMount(){
     }else{
         this.setState({isEmergencyFlag:true});
     }
-    if (this.props.isReminder === constants.kNo) {
-        this.setState({reminderAddOrNot:false});
-    } else {
-        this.setState({reminderAddOrNot:true});
-    }
+  
     
 }
+async _getStorageValue(){
+    const token = await AsyncStorage.getItem(constants.kClassNameComeFrom)
+    console.log(token)
+    if (!token == '') {
+        this.setState({classNameComeFrom:token});
+   }
+   console.log('Emp Form *********',this.state.classNameComeFrom, '***********');
 
+ }
    
     onEmergencyCallBtnClick(){
-        console.log('this. emergency call ', this.props.isEmergencyCall);
-
+    
         if (this.props.isEmergencyCall && this.props.isEmergencyCall == constants.kNo) {
 
             this.props.EmployeeUpdate({prop:'isEmergencyCall', value:constants.kYes})
@@ -115,73 +78,8 @@ componentDidMount(){
     onAddEventBtnClick(){
             Actions.AddEvents();        
     }
-    onYearBtnClick(){
-        
-        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kYear})
-        if (this.state.isYear) {
-            this.setState({
-                 bgColorBtnYear: constants.kNotSelectedColor,
-                 isYear: false
-             });
-        } else {
-           this.setState({
-                bgColorBtnYear: constants.kSelectedColor,
-                bgColorBtnMonth: constants.kNotSelectedColor,
-                bgColorBtnWeek: constants.kNotSelectedColor,
-                isYear: true,
-                isMonth: false,
-                isWeek: false
-            });
-            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionYear);
-
-        }
-       
-    }
-    onMonthBtnClick(){
-        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kMonth})
-        if (this.state.isMonth) {
-            console.log('in month true ')
-            this.setState({
-                bgColorBtnMonth: constants.kNotSelectedColor,
-                
-                    isMonth: false,
-                    
-                });
-            
-        } else {
-            console.log('in month else')
-            this.setState({
-                bgColorBtnMonth: constants.kSelectedColor,
-                bgColorBtnYear: constants.kNotSelectedColor,
-                bgColorBtnWeek: constants.kNotSelectedColor,
-                    isWeek: false,
-                    isYear: false,
-                    isMonth: true
-            });
-            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionMonth);
-
-        }
-    }
-    onWeekBtnClick(){
-        this.props.EmployeeUpdate({prop:'repeatValue', value:constants.kWeek})
-        if (this.state.isWeek) {
-            this.setState({
-                 bgColorBtnWeek: constants.kNotSelectedColor,
-                 isWeek: false
-             });
-        } else {
-           this.setState({
-            bgColorBtnMonth: constants.kNotSelectedColor,
-            bgColorBtnYear: constants.kNotSelectedColor,
-            bgColorBtnWeek: constants.kSelectedColor,
-                isMonth: false,
-                isYear: false,
-                isWeek: true
-            });
-            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptionWeek);
-
-        }
-    }
+    
+   
     onChangeTextMessage(text){
         console.log( 'text length ', text.length);
         
@@ -193,10 +91,33 @@ componentDidMount(){
     onChangePhoneText(text){
         this.props.EmployeeUpdate({prop:'phone', value:text.replace(/[^0-9]/g, '')})
     }
-
+    emergencyCall(){
+        // use react-native-immediate-phone-call when update to react native from expo
+          console.log(' ****  emergencyBtnClick ');
+                // RNImmediatePhoneCall.immediatePhoneCall('0123456789');
+            }
+    eventList = () => {
+        return (
+            <View style={styles.listContainer}>
+                    <FlatList
+                        data = { this.props.arrayEvents }
+                        scrollEnabled={true}
+                        marginBottom={50}
+                        keyExtractor={(item, index) => index.toString()}
+                            renderItem = { info => (
+                            <ListItem 
+                                placeName={ info.item.value }
+                            //  onItemPressed={() => this.onItemDeleted(info.item.key)}
+                            />
+                            )}
+                        />
+            </View>
+            
+            )
+        }
 
     render(){
-        // console.log("Emp form render testing  ", this.props.employee.arrayEvents);
+        console.log("Emp form render ", this.props.isEmergencyCall);
 
          let image  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
        
@@ -204,22 +125,28 @@ componentDidMount(){
             image = this.props.image;
         }
         let isAnotherEventAdd = false;
-        
-        // if (Array.isArray(this.props.employee.arrayEvents)) {
-        //     if(this.props.employee.arrayEvents.length>0){
-        //         isAnotherEventAdd = true;
-        //     }
-        // } else
-         {
             if (Array.isArray(this.props.arrayEvents)) {
                 if(this.props.arrayEvents.length>0){
                     isAnotherEventAdd = true;
                 }
             } 
-        }
-        
+            let isEmegency = false;
+            if(this.props.isEmergencyCall === constants.kNo){
+               isEmegency = false;
+            }else {
+                isEmegency = true;
+            }
+            let isEditView = true;
+            if(this.state.classNameComeFrom === constants.kCreateClass){
+               isEditView =  false;
+            }
         return(
             <View>
+                <View style= {styles.emergencyBtn}>
+            <TouchableOpacity onPress={()=>this.emergencyCall()}>
+                    <Image style={styles.emergencyCallImg} source={require('../../assets/CallEmergency.png')}/>
+                </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.imageBtnStyle } onPress= {this._pickImage}>
                                 <Text style={{alignSelf:'center'}}>
                                    {/* Click Me! */}
@@ -282,34 +209,34 @@ componentDidMount(){
                         />
                         
                  </CardSection>
-                 
-                   
                     <CardSection>
                         <Text style= {styles.textStyle}>
                                     Mark this no. for emergency call
                         </Text>
                        <View style={styles.addReminderBtnView}> 
                                 <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onEmergencyCallBtnClick()}>
-                                      {this.state.isEmergencyFlag? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                      {isEmegency? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
                                  <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
                                        
                         </TouchableOpacity>
                        </View>
                     </CardSection>
                     <CardSection>
-                    <Text style= {styles.textStyle}>
-                            Add events
-                        </Text>
-                    <View style={styles.addReminderBtnView}> 
-                                <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onAddEventBtnClick()}>
-                                      {isAnotherEventAdd? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
-                                    <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
-                                       
-                        </TouchableOpacity>
-                                        
-                                        </View>
+                            <Text style= {styles.textStyle}>
+                                    Add events
+                                </Text>
+                            <View style={styles.addReminderBtnView}> 
+                                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onAddEventBtnClick()}>
+                                            {isAnotherEventAdd? <Image source={require('../../assets/correct.png')} style={styles.imgCheckMark} /> :
+                                            <Image source={require('../../assets/emptyCircle.png')} style={styles.imgCheckMark} />}   
+                                            
+                                </TouchableOpacity>
+                            </View>
                     </CardSection>
-                   
+                    
+                    {/* <View style = { styles.listContainer }>
+                             { this.eventList() }
+                      </View> */}
             </View>
              
         )
@@ -380,6 +307,23 @@ const mapStateToProps = (state) => {
 }
 
 const styles = {
+    listContainer: {
+        marginTop:10,
+        width: '100%',
+        height: '79%'
+      },
+    emergencyBtn:{
+        marginTop:'2%',
+        right: '3%',
+        marginBottom: '5%',
+       textAlign:'right',
+       position: 'absolute'
+    },
+    emergencyCallImg:{
+        width:32,
+        height:32,
+        alignSelf:'center'
+    },
     pickerTextStyle:{
         fontSize: 18,
         paddingLeft: 20,

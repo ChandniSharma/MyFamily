@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Picker, Alert} from 'react-native';
+import {View, Text, Picker, Alert, AsyncStorage} from 'react-native';
 import { connect } from 'react-redux';
-import { EmployeeUpdate,EmployeeRecordCreate } from '../actions';
+import { EmployeeUpdate,EmployeeRecordCreate, employeeRecordRefresh } from '../actions';
 
 import { Card, CardSection, Input, Button, Spinner} from './common';
 import EmployeeForm from './EmployeeForm';
@@ -13,7 +13,13 @@ import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Const
 
 
 class EmployeeCreate extends Component{
-    
+    logInToken = async (token) => {
+        await AsyncStorage.setItem(constants.kClassNameComeFrom,token)
+    }
+    componentDidMount(){
+        this.logInToken(constants.kCreateClass);
+        
+    }
     onButtonPressed(){
         const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = this.props;  
         
@@ -42,7 +48,6 @@ class EmployeeCreate extends Component{
                       return;
                     }
             }
-        
         this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo});
     }
 
@@ -54,7 +59,7 @@ class EmployeeCreate extends Component{
             showsVerticalScrollIndicator={true}>
              <View style={styles.mainView}> 
                  
-                <EmployeeForm  />
+                <EmployeeForm isComeFrom='EmployeeCreate' />
                 <PublisherBanner
             style={styles.bottomBanner}
                 bannerSize="fullBanner"
@@ -97,6 +102,7 @@ const mapStateToProps = (state) =>{
 
 export default connect(mapStateToProps, 
     {   EmployeeUpdate,
-        EmployeeRecordCreate
+        EmployeeRecordCreate,
+        employeeRecordRefresh
     })
     (EmployeeCreate)

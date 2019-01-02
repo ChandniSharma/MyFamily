@@ -8,4 +8,5 @@ export const EMPLOYESS_FETCH_SUCCESS = 'employess_fetch_success';
 export const EMPLOYEE_CREATE = 'employee_create';
 export const EMPLOYEE_SAVE_SUCCESS = 'employee_save_success';
 export const EMPLOYEE_DELETE_SUCCESS = 'employee_delete_success';
+export const EMPLOYEE_DATA_RERESH = 'employeeDataRefresh';
 

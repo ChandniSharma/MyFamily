@@ -10,7 +10,7 @@ return(
             {children}
            </Text>
             </TouchableOpacity>
-);
+   );
 }
 
 const styles={
@@ -25,14 +25,15 @@ const styles={
     },
     buttonStyle:{
         
-        width:'70%',
+        width:'40%',
         backgroundColor:'#ffffff',
         borderColor: 'gray',
         borderWidth: 1,
         borderRadius: 13,
         alignSelf: 'center',
-        marginTop: 10,
-        marginBottom: 10,
+        // marginTop: 10,
+        // marginBottom: 10,
+        margin: 10,
     //  marginLeft: 10,
     //  marginRight: 10,
      

@@ -102,11 +102,14 @@ const mapStateToProps = state => {
 };
 
 const styles={
+    
     mainView:{
        flex: 1,
     },
     emptyMessageView:{
-        backgroundColor:'yellow', 
+        // backgroundColor:'yellow', 
+        marginTop:'1%',
+        height:150,
         // width: '70%',
     },
     titleStyle:{
@@ -114,16 +117,11 @@ const styles={
         paddingLeft: 15,
     },
     emergencyBtn:{
-
-        marginTop:'5%',
-        right: '2%',
+        marginTop:'2%',
+        right: '3%',
         marginBottom: '5%',
-       
-        // backgroundColor:'green',
-        
-        alignItems: 'center',
-        justifyContent:'center',
-    //    position: 'absolute'
+       textAlign:'right',
+       position: 'absolute'
     },
     emergencyCallImg:{
         width:32,
@@ -131,6 +129,7 @@ const styles={
         alignSelf:'center'
     },
     listStyle:{
+        marginTop:'10%',
       paddingTop :'5%',
       height: '82%',
     },

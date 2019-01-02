@@ -1,10 +1,10 @@
-import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE , EMPLOYEE_SAVE_SUCCESS, EMPLOYEE_DELETE_SUCCESS} from '../actions/types';
+import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE , EMPLOYEE_SAVE_SUCCESS, EMPLOYEE_DELETE_SUCCESS, EMPLOYEE_DATA_RERESH} from '../actions/types';
 import * as constants from '../components/Constants';
 
 const INITIAL_STATE = {
-    name: '',
+    nameUser: '',
     phone: '',
-    dob: '', 
+    dob: new Date(), 
     image:'', 
     repeatValue:'', 
     isReminder:constants.kNo,
@@ -16,6 +16,8 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     // console.log( 'action is ---', action);
     switch(action.type){
+        case EMPLOYEE_DATA_RERESH:
+         return INITIAL_STATE;
         case EMPLOYEE_UPDATE:
          return {...state, [action.payload.prop]:action.payload.value};
        case EMPLOYEE_CREATE:

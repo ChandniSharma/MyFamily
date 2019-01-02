@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, TextInput, FlatList, Text, Alert, Image, TouchableOpacity, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Text, Alert, Image, TouchableOpacity, Keyboard, TouchableWithoutFeedback, ScrollView,AsyncStorage } from 'react-native';
 import ListItem from './common/ListItem';
 
 import DatePicker from "react-native-datepicker";
@@ -31,9 +31,12 @@ state = {
     dateEvent: '',
     message:'',
     reminderAddOrNot:constants.kNo,
+    classNameComeFrom:'',
 }
 
  componentDidMount(){
+
+    this._getStorageValue()
      console.log('in Add Events ',this.props.arrayEvents );
 
      let cloneArray = [];
@@ -49,7 +52,13 @@ state = {
  componentWillMount(){
      
  }
-
+ async _getStorageValue(){
+    const token = await AsyncStorage.getItem(constants.kClassNameComeFrom)
+    console.log(token)
+    if (!token == '') {
+        this.setState({classNameComeFrom:token});
+   }
+ }
 
 placeSubmitHandler = () => {
     
@@ -132,18 +141,25 @@ onItemDeleted = (key) => {
 }
 
 render() {
+
     let imgClock;
     if(this.state.reminderAddOrNot === constants.kYes){
         imgClock =  <Image source={require('../../assets/activeAlarm.png')} style={styles.alarmStyle} />
     }else{
         imgClock = <Image source={require('../../assets/InactiveAlarm.png')} style={styles.alarmStyle} />
     }
+    let viewBottom = <View />;
+  let isEditView = false;
+  console.log('Add Events ===== ',this.state.classNameComeFrom );
+            if(this.state.classNameComeFrom === constants.kEditClass){
+                isEditView = true;
+            }
    return (
     <View style={{flex: 1, backgroundColor:'#ffffff'}}> 
    
     <View style={ styles.container }>
     
-   <DismissKeyboardView style = { styles.inputContainer }>
+   {!isEditView?<DismissKeyboardView style = { styles.inputContainer }>
               <InputEvent 
                     label={'Event Name'}
                     placeholder={'Chandni'}
@@ -177,11 +193,12 @@ render() {
                             onDateChange={(date) => this.setState({dateEvent:date})}
                         />
          
-        <TouchableOpacity style={styles.placeButton} onPress={ this.placeSubmitHandler  }>
-               <Image source={require('../../assets/plusIcon.png')} style={styles.imageStyle } />
-            </TouchableOpacity>
+         <TouchableOpacity style={styles.placeButton} onPress={ this.placeSubmitHandler  }>
+                        <Image source={require('../../assets/plusIcon.png')} style={styles.imageStyle } />
+                     </TouchableOpacity>
        
-        </DismissKeyboardView>
+        </DismissKeyboardView>:<View />}
+        {!isEditView? 
         <CardSection>
         <MessageInput 
                     label={'Message'}
@@ -192,8 +209,8 @@ render() {
                      <Text style={styles.textLimit}>
                             {this.state.message.length}/200
                     </Text>
-        </CardSection>
-        
+        </CardSection>:<View />}
+        {!isEditView?
         <CardSection>
                     <Text style= {styles.textStyle}>
                             Add Reminder
@@ -203,23 +220,25 @@ render() {
                                       {imgClock}   
                                </TouchableOpacity>
                     </View>
-                    </CardSection>
+                    </CardSection> 
+                  :<View />}
+
             <View style = { styles.listContainer }>
                 { this.placesOutput() }
            </View>
 
       </View>
-       <View style={styles.viewBottom}>
-            <Text style={styles.textNote}>
-                Note: You can add upto 5 events.
-            </Text>
-            <CardSection>
-                        <Button onPress={()=> this.onClickBack()}>
-                           Back To Add View
-                        </Button>
-                    </CardSection>
-         </View>
-    </View>
+     {!isEditView?<View style={styles.viewBottom}>
+                            <Text style={styles.textNote}>
+                                Note: You can add upto 5 events.
+                            </Text>
+                            <CardSection>
+                                        <Button onPress={()=> this.onClickBack()}>
+                                        Back To Add View
+                                        </Button>
+                                    </CardSection>
+                        </View>:<View />}
+       </View>
     );
   }
   onClickBack(){
@@ -227,11 +246,12 @@ render() {
 
        this.props.EmployeeUpdate({prop:'arrayEvents', value:this.state.places});
        Actions.EmployeeCreate({arrayEvents:this.state.places});
-      
-    // this.props.navigation.navigate('Home',{
-    //     itemId: 86,
-    //     otherParam: 'anything you want here',
-    //   });
+       
+        // if(this.state.classNameComeFrom === constants.kCreateClass){
+            
+        // } else{
+        //     Actions.EmployeeEdit({arrayEvents:this.state.places});
+        // } 
    }
 }
 
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
       listContainer: {
         marginTop:10,
         width: '100%',
-        height: '82%'
+        height: '79%'
       },
       imageStyle:{
         width:32,
@@ -314,7 +334,7 @@ const styles = StyleSheet.create({
        },
        datePickerStyle:{
         width: "40%",
-        marginLeft: 20,
+        marginLeft: 5,
         borderRadius: 20
     },
     textLimit:{
@@ -330,7 +350,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     addReminderBtnView:{
-        marginTop: 10,  
+        marginTop: 5,  
         marginLeft:10,
        
     },
