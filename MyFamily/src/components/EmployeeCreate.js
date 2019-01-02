@@ -15,10 +15,19 @@ import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Const
 class EmployeeCreate extends Component{
     logInToken = async (token) => {
         await AsyncStorage.setItem(constants.kClassNameComeFrom,token)
+        await AsyncStorage.setItem(constants.kIsNeedToRefreshEmpForm, constants.kNo);
     }
+    async _getStorageValue(){
+        const token = await AsyncStorage.getItem(constants.kIsNeedToRefreshEmpForm)
+        console.log(token)
+        if (!token == '' && token === constants.kYes) {
+            this.props.employeeRecordRefresh();
+       }
+     }
     componentDidMount(){
+       
+        this._getStorageValue();
         this.logInToken(constants.kCreateClass);
-        
     }
     onButtonPressed(){
         const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = this.props;  

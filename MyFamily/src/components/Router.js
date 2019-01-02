@@ -2,7 +2,7 @@
 
 
 import React, {Component} from 'react';
-import {View, Text, Alert, Image, TouchableOpacity} from 'react-native'
+import {View, Text, Alert, Image, TouchableOpacity, AsyncStorage} from 'react-native'
 import {Scene, Router, Actions} from 'react-native-router-flux';
 import {Button} from './common';
 import LoginForm from '../LoginForm';
@@ -15,6 +15,10 @@ import * as constants from '../components/Constants';
 // import { Icon } from 'native-base';
 
  class  RouterComponent extends Component{
+    refrshDataOrNot = async (token) => {
+        await AsyncStorage.setItem(constants.kIsNeedToRefreshEmpForm,token)
+        console.log("refrshDataOrNot Setting yes ",token);
+    }
     signOutUserMessage = async () => {
 
         Alert.alert(
@@ -81,12 +85,18 @@ import * as constants from '../components/Constants';
         );
      }
      addButton(){
-        this.props.employeeRecordRefresh();
+         
          return(
-         <TouchableOpacity style={styles.addButton} onPress={()=> Actions.EmployeeCreate()}>
+         <TouchableOpacity style={styles.addButton} onPress={()=>this.moveToCreateView() }>
             <Image source={require('../../assets/plusIcon.png')} style={styles.addButtonImg}/>
       </TouchableOpacity>
       )
+     }
+     moveToCreateView(){
+         // Make empty text fields so set the class name create 
+        this.refrshDataOrNot(constants.kYes);
+        Actions.EmployeeCreate();
+
      }
      signoutButton(){
         return(

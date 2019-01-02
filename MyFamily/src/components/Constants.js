@@ -49,9 +49,10 @@ export const kMonth = 'month';
 export const kWeek = 'week';
 export const kCreateClass = 'EmployeeCreate';
 export const kEditClass = 'EmployeeEdit';
-export const kClassNameComeFrom = 'classNameComeFrom';
+export const kClassNameComeFrom = 'classNameComeFrom'; // so that add event view manage differently in add or edit mode
 export const kSelectedColor = '#FF9F00';
 export const kNotSelectedColor = 'white'; // #ffffff
+export const kIsNeedToRefreshEmpForm = 'isNeedToRefreshEmpForm';
 
 export const iconBlueColor = '#006DF0';
 export const pinkColor = '#FC0239';

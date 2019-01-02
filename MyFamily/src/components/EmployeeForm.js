@@ -117,7 +117,7 @@ async _getStorageValue(){
         }
 
     render(){
-        console.log("Emp form render ", this.props.isEmergencyCall);
+      
 
          let image  = 'https://bootdey.com/img/Content/avatar/avatar6.png';
        
