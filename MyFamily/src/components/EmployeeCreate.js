@@ -57,7 +57,7 @@ class EmployeeCreate extends Component{
                       return;
                     }
             }
-        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2020', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo});
+        this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo});
     }
 
     render(){

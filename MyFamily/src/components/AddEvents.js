@@ -126,7 +126,6 @@ placesOutput = () => {
                     )}
                 />
        </View>
-    
     )
 }
 
@@ -245,13 +244,7 @@ render() {
     //   console.log('on click back in add  ',this.state.places);
 
        this.props.EmployeeUpdate({prop:'arrayEvents', value:this.state.places});
-       Actions.EmployeeCreate({arrayEvents:this.state.places});
-       
-        // if(this.state.classNameComeFrom === constants.kCreateClass){
-            
-        // } else{
-        //     Actions.EmployeeEdit({arrayEvents:this.state.places});
-        // } 
+       Actions.pop({arrayEvents:this.state.places});
    }
 }
 
