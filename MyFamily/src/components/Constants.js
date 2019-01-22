@@ -56,3 +56,4 @@ export const kIsNeedToRefreshEmpForm = 'isNeedToRefreshEmpForm';
 
 export const iconBlueColor = '#006DF0';
 export const pinkColor = '#FC0239';
+export const kemergencyNumber = 'emergencyNumber';

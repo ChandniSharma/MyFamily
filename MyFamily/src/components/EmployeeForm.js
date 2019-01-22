@@ -19,7 +19,7 @@ import ListItem from './common/ListItem';
 // d1.setHours((new Date().getHours())+2);
 // let reminderRepeatVal = constants.kYear;
 // let t = new Date();
-//   t.setSeconds(t.getSeconds() + 10);
+// t.setSeconds(t.getSeconds() + 10);
 
 
 
@@ -50,8 +50,6 @@ componentDidMount(){
     }else{
         this.setState({isEmergencyFlag:true});
     }
-  
-    
 }
 async _getStorageValue(){
     const token = await AsyncStorage.getItem(constants.kClassNameComeFrom)
@@ -60,13 +58,10 @@ async _getStorageValue(){
         this.setState({classNameComeFrom:token});
    }
    console.log('Emp Form *********',this.state.classNameComeFrom, '***********');
-
  }
    
     onEmergencyCallBtnClick(){
-    
         if (this.props.isEmergencyCall && this.props.isEmergencyCall == constants.kNo) {
-
             this.props.EmployeeUpdate({prop:'isEmergencyCall', value:constants.kYes})
             this.setState({isEmergencyFlag:true});
 
@@ -95,7 +90,10 @@ async _getStorageValue(){
         // use react-native-immediate-phone-call when update to react native from expo
           console.log(' ****  emergencyBtnClick ');
                 // RNImmediatePhoneCall.immediatePhoneCall('0123456789');
+                Communications.phonecall('+91'+this.props.employee.phone,true);
+
             }
+
     eventList = () => {
         return (
             <View style={styles.listContainer}>

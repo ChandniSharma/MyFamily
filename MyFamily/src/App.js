@@ -66,27 +66,27 @@ export default class App extends Component{
  
 //     componentDidMount() {
         
-//         // ALWAYS USE TEST ID for Admob ads
-//         AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
-//         AdMobInterstitial.setTestDeviceID('EMULATOR');
+        // // ALWAYS USE TEST ID for Admob ads
+        // AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+        // AdMobInterstitial.setTestDeviceID('EMULATOR');
 
-//         AdMobInterstitial.addEventListener('interstitialDidLoad',
-//             () => this.showInterstitial()
-//         );
+        // AdMobInterstitial.addEventListener('interstitialDidLoad',
+        //     () => this.showInterstitial()
+        // );
  
-//         AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
-//             () => console.log('interstitialDidFailToLoad')
-//         );
+        // AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
+        //     () => console.log('interstitialDidFailToLoad')
+        // );
  
-//         AdMobInterstitial.addEventListener('interstitialDidOpen',
-//             () => console.log('interstitialDidOpen')
-//         );
-//         AdMobInterstitial.addEventListener('interstitialDidClose',
-//             () => console.log('interstitialDidClose')
-//         );
-//         AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
-//             () => console.log('interstitialWillLeaveApplication')
-//         );
+        // AdMobInterstitial.addEventListener('interstitialDidOpen',
+        //     () => console.log('interstitialDidOpen')
+        // );
+        // AdMobInterstitial.addEventListener('interstitialDidClose',
+        //     () => console.log('interstitialDidClose')
+        // );
+        // AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
+        //     () => console.log('interstitialWillLeaveApplication')
+        // );
 
 //         // AdMobRewarded.setTestDeviceID("EMULATOR");
 
@@ -125,12 +125,12 @@ export default class App extends Component{
 //         // first - load ads and only then - show
 //         AdMobRewarded.requestAdAsync (() => AdMobRewarded.showAdAsync());
 //       }
-//     showInterstitial() {
-//         // AdMobInterstitial.requestAd(()=>AdMobInterstitial.showAd());
-//         console.log( ' finally time to show ');
-//         AdMobInterstitial.requestAdAsync(()=>AdMobInterstitial.showAdAsync());
+    // showInterstitial() {
+    //     // AdMobInterstitial.requestAd(()=>AdMobInterstitial.showAd());
+    //     console.log( ' finally time to show ');
+    //     AdMobInterstitial.requestAdAsync(()=>AdMobInterstitial.showAdAsync());
 
-//     }
+    // }
  
 //     render() {
 //         return (

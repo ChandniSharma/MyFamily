@@ -1,27 +1,62 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
-import {View, Text, ListView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, ListView, Image, TouchableOpacity,AsyncStorage} from 'react-native';
 import { connect } from 'react-redux';
 import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
 import { Button } from './common';
 import { Actions } from 'react-native-router-flux';
 import {AdMobInterstitial,AdMobBanner, PublisherBanner} from 'expo';
-import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Constants'
 import Communications from 'react-native-communications';
+import * as constants from './Constants';
 //import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 class EmployeeList extends Component{
-
+constructor(props){
+  var emergencyNumber = '';
+}
     componentWillMount(){
         this.props.employeesFetch();
 
        this.createDataSource(this.props);
     }
+
+    componentDidMount(){
+                // ALWAYS USE TEST ID for Admob ads
+                AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+                AdMobInterstitial.setTestDeviceID('EMULATOR');
+        
+                AdMobInterstitial.addEventListener('interstitialDidLoad',
+                    () => this.showInterstitial()
+                );
+         
+                AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
+                    () => console.log('interstitialDidFailToLoad')
+                );
+         
+                AdMobInterstitial.addEventListener('interstitialDidOpen',
+                    () => console.log('interstitialDidOpen')
+                );
+                AdMobInterstitial.addEventListener('interstitialDidClose',
+                    () => console.log('interstitialDidClose')
+                );
+                AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
+                    () => console.log('interstitialWillLeaveApplication')
+                );
+        
+    }
+
     componentWillReceiveProps(nextProps){
         // Next props are the next set of props that the component will be rendered with 
         // this.props are the old set of props
         // this.props.employeesFetch();
         this.createDataSource(nextProps);
+    }
+
+    showInterstitial() {
+        // AdMobInterstitial.requestAd(()=>AdMobInterstitial.showAd());
+        console.log( ' finally time to show ');
+        AdMobInterstitial.requestAdAsync(()=>AdMobInterstitial.showAdAsync());
+
     }
 
     createDataSource(employees){
@@ -60,10 +95,14 @@ class EmployeeList extends Component{
     adMobEvent(){
         console.log( 'in admob event method ');
     }
+    async _getStorageValue(){
+      this.emergencyNumber = await AsyncStorage.getItem(constants.kemergencyNumber);
+    }
     emergencyCall(){
-// use react-native-immediate-phone-call when update to react native from expo
-  console.log(' ****  emergencyBtnClick ');
-        // RNImmediatePhoneCall.immediatePhoneCall('0123456789');
+        this.showInterstitial();
+        this._getStorageValue();
+        console.log(' ****  emergencyBtnClick ', this.emergencyNumber);
+        Communications.phonecall('+91'+this.emergencyNumber,true);
     }
 
     render(){
@@ -85,7 +124,7 @@ class EmployeeList extends Component{
                 <PublisherBanner
             style={styles.bottomBanner}
                 bannerSize="fullBanner"
-                adUnitID= {kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
+                adUnitID= {constants.kPUBLISH_BANNER_ID} // Test ID, Replace with your-admob-unit-id
                 testDeviceID="EMULATOR"
                 onDidFailToReceiveAdWithError={this.bannerError}
                 onAdMobDispatchAppEvent={this.adMobEvent} />

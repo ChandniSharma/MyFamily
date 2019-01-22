@@ -13,9 +13,13 @@ import {kBANNER_ID, kINTERSTIAL_ID, KVIDEO_ID, kPUBLISH_BANNER_ID} from './Const
 
 
 class EmployeeCreate extends Component{
-    logInToken = async (token) => {
-        await AsyncStorage.setItem(constants.kClassNameComeFrom,token)
+    setStorageValue = async (token, number) => {
+        await AsyncStorage.setItem(constants.kClassNameComeFrom,token);
         await AsyncStorage.setItem(constants.kIsNeedToRefreshEmpForm, constants.kNo);
+        await AsyncStorage.setItem(constants.kemergencyNumber,number);
+
+        let number = await AsyncStorage.getItem(constants.kemergencyNumber);
+        console.log('number is ',number);
     }
     async _getStorageValue(){
         const token = await AsyncStorage.getItem(constants.kIsNeedToRefreshEmpForm)
@@ -25,10 +29,10 @@ class EmployeeCreate extends Component{
        }
      }
     componentDidMount(){
-       
         this._getStorageValue();
-        this.logInToken(constants.kCreateClass);
+        this.setStorageValue(constants.kCreateClass);
     }
+   
     onButtonPressed(){
         const {nameUser, phone, dob, image, repeatValue, isReminder, bdayMsg, arrayEvents, isEmergencyCall} = this.props;  
         
@@ -56,6 +60,9 @@ class EmployeeCreate extends Component{
                       )
                       return;
                     }
+            }
+            if(isEmergencyCall){
+
             }
         this.props.EmployeeRecordCreate({nameUser, phone: phone || '', dob:dob || '1-1-2000', image: image || '', repeatValue: repeatValue || '', isReminder:isReminder || constants.kNo, bdayMsg:bdayMsg || '', arrayEvents:arrayEvents || [], isEmergencyCall:isEmergencyCall || constants.kNo});
     }
